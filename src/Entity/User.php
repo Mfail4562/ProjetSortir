@@ -84,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Travel::class, inversedBy: 'subscriptionedTravelers')]
     private Collection $subscriptionedTravels;
 
-    
+
     public function __construct()
     {
         $this->leaderTraveler = new ArrayCollection();
@@ -115,7 +115,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -298,7 +298,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 
 
 }

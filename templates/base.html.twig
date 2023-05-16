@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html lang=en>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-              content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{% block title %}Sortir !{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
-        <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        <link rel="icon" href="{{ asset('img/avion.png') }}">
-        {% block extrastyles %}{% endblock %}
-    </head>
-    <header>
-        {% include 'inc/nav.html.twig' %}
-    </header>
-    {# read and display all flash messages #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="flash flash-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Sortir !{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="icon" href="{{ asset('img/avion.png') }}">
+    {% block extrastyles %}{% endblock %}
+</head>
+<header>
+    {% include 'inc/nav.html.twig' %}
+</header>
+{# read and display all flash messages #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="flash flash-{{ label }}">
+            {{ message }}
+        </div>
     {% endfor %}
-    <body class="vh-100">
-    <main>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
-    </main>
-    </body>
-    <footer>
-
-        <div>&copy;{{ "now"|date("Y") }} Sortir</div>
+{% endfor %}
+<body class="vh-100">
+<main>
+    {% block body %}{% endblock %}
+    {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+</main>
+</body>
+<footer>
+    <!-- Footer -->
+    <footer class="footer bg-dark text-center text-white ">
+        <!-- Copyright -->
+        <div class="text-center p-3 bg-primary ">
+            <div>&copy; {{ "now"|date("Y") }} Sortir</div>
+            <a class="text-white" href="{{ path('app_main_index') }}">{ { H&M2 } }</a>
+        </div>
+        <!-- Copyright -->
     </footer>
+
+    <!-- Footer -->
+
+</footer>
 </html>
