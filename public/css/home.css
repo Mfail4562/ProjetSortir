@@ -10,7 +10,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    background-image:linear-gradient(rgba(0,0,0,0.3), rgba(0,5,5,0.7)), url('../img/backgroundimg1.png');
+    background-image:linear-gradient(rgba(0,0,0,0.3), rgba(0,5,5,0.7)), url('../img/2.png');
 
     background-size: cover;
     color: black;
