@@ -9,7 +9,7 @@
                     style="margin-top: -1px;"
             />
         </a>
-        <a class="navbar-brand" href="{{ path('app_main_index') }}">Sortir</a>
+        <a class="navbar-brand" href="{{ path('app_main_index') }}">Travel.com</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
                 aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -35,10 +35,12 @@
                     <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.firstname }}
                         )</a>
                 </li>
-                {#<li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_user_show') }}" title="Profile">Profile
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_user_show',{id:app.user.id}) }}" title="Profile">Profile
+
                         ({{ app.user.pseudo }})</a>
-                </li>#}
+                </li>
                 {% if is_granted("ROLE_ADMIN") %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>
@@ -51,7 +53,7 @@
                     <a class="btn btn-secondary m-2 my-sm-0"
                        href="{{ path('app_login') }}" title="Login" role="button">Login</a>
                     <a class="btn btn-secondary m-2 my-sm-0"
-                       href="{{ path('app_register') }}" title="Create account" role="button">Regitser</a>
+                       href="{{ path('app_register') }}" title="Create account" role="button">Register</a>
                 </form>
             {% endif %}
         </div>

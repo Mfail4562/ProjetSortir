@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column(length: 13)]
-    #[Assert\Regex('/^(?:(?:\+|00)33|0)\s*[67](?:[\s.-]*\d{2}){4}$/xs')]
+    #[Assert\Regex('/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/xs')]
     private ?string $phoneNumber = null;
 
     #[ORM\Column]
