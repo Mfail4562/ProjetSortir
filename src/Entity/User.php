@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['pseudo'], message: 'This pseudo is\'nt available')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -40,7 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             max: 50,
             minMessage: 'Minimum {{ limit }} characters',
             maxMessage: 'Maximum {{ limit }} characters'),
-        Assert\Unique(message: 'This pseudo is not available')
     ]
     private ?string $pseudo = null;
 
@@ -87,8 +87,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     public function __construct()
     {
-        $this->organisedTravels = new ArrayCollection();
-        $this->travelsSubscriptioned = new ArrayCollection();
         $this->leaderTraveler = new ArrayCollection();
         $this->subscriptionedTravels = new ArrayCollection();
     }
