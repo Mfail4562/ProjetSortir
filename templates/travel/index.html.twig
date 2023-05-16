@@ -1,20 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TravelController!{% endblock %}
+{% block title %}Travel index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Travel index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>DateStart</th>
+                <th>Duration</th>
+                <th>LimitDateSubscription</th>
+                <th>NbMaxTraveler</th>
+                <th>Infos</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for travel in travel %}
+            <tr>
+                <td>{{ travel.id }}</td>
+                <td>{{ travel.name }}</td>
+                <td>{{ travel.dateStart ? travel.dateStart|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ travel.duration ? travel.duration|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ travel.nbMaxTraveler }}</td>
+                <td>{{ travel.infos }}</td>
+                <td>
+                    <a href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
+                    <a href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/ENI/ProjetSortir/src/Controller/TravelController.php'|file_link(0) }}">src/Controller/TravelController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/ENI/ProjetSortir/templates/travel/index.html.twig'|file_link(0) }}">templates/travel/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_travel_new') }}">Create new</a>
 {% endblock %}
