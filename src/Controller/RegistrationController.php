@@ -32,8 +32,6 @@ class RegistrationController extends AbstractController
                 )
 
             )
-            ->setAdmin(false)
-                ->setActif(true)
             ;
 
             $entityManager->persist($user);
