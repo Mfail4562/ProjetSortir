@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -31,13 +32,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique: true)]
+    #[
+        Assert\NotBlank(message: 'you need to choose a pseudo'),
+        Assert\Length(
+            min: 2,
+            max: 50,
+            minMessage: 'Minimum {{ limit }} characters',
+            maxMessage: 'Maximum {{ limit }} characters'),
+        Assert\Unique(message: 'This pseudo is not available')
+    ]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255)]
+    #[
+        Assert\Length(
+            min: 2,
+            max: 255,
+            minMessage: 'Minimum {{ limit }} characters',
+            maxMessage: 'Maximum {{ limit }} characters'),
+    ]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[
+        Assert\Length(
+            min: 2,
+            max: 255,
+            minMessage: 'Minimum {{ limit }} characters',
+            maxMessage: 'Maximum {{ limit }} characters'),
+    ]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 13)]
