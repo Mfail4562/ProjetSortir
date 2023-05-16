@@ -34,7 +34,7 @@ class TravelController extends AbstractController
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('travel/new.html.twig', [
+        return $this->render('travel/new.html.twig', [
             'travel' => $travel,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class TravelController extends AbstractController
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('travel/edit.html.twig', [
+        return $this->render('travel/edit.html.twig', [
             'travel' => $travel,
             'form' => $form,
         ]);
@@ -75,4 +75,5 @@ class TravelController extends AbstractController
 
         return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

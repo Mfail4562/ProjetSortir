@@ -204,6 +204,7 @@ class Travel
 
     public function getPlace(): ?Place
     {
+
         return $this->place;
     }
 
