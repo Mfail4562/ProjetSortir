@@ -32,14 +32,15 @@
                 </li>
                 {% if app.user %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.firstname }}
-                        )</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_user_show',{id:app.user.id}) }}" title="Profile">Profile
 
                         ({{ app.user.pseudo }})</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.pseudo }}
+                        )</a>
+                </li>
+
                 {% if is_granted("ROLE_ADMIN") %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>

@@ -7,7 +7,13 @@
     <div class="card-body px-4 py-5 px-md-5">
         <div class="row">
             <div class="mx-auto col-10 col-md-8 col-lg-6">
-                {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+
+              
+                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                {{ form_end(form) }}
+
             </div>
         </div>
         <a href="{{ path('app_user_index') }}">back to list</a>
