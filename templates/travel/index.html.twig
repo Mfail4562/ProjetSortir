@@ -3,43 +3,46 @@
 {% block title %}Travel index{% endblock %}
 
 {% block body %}
-    <h1>Travel index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>DateStart</th>
-                <th>Duration</th>
-                <th>LimitDateSubscription</th>
-                <th>NbMaxTraveler</th>
-                <th>Infos</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for travel in travel %}
-            <tr>
-                <td>{{ travel.id }}</td>
-                <td>{{ travel.name }}</td>
-                <td>{{ travel.dateStart ? travel.dateStart|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ travel.duration ? travel.duration|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ travel.nbMaxTraveler }}</td>
-                <td>{{ travel.infos }}</td>
-                <td>
-                    <a href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
-                    <a href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+    <h1 class="text-center">Travel index</h1>
+        <section>
+            <div class="container py-5">
+                <div class="row">
+                    <tbody>
+                    {% for travel in travel %}
+                    <div class="col-lg-4">
+                        <div class="card mb-4 border-white">
+                            <div class="card-body ">
+                                <img src="assets/img/illustration.jpg"
+                                        alt="avatar" class="rounded-circle img-fluid">
+                                <h5 class="my-3">{{ travel.name }}</h5>
+                                <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p><hr />
+                                <p class="text-muted mb-1">Date debut du voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : ''}}</p><hr />
+                                <p class="text-muted mb-1">Date fin du voyage: {{ travel.duration ? travel.duration|date('Y-m-d ') : '' }}</p><hr />
+                                <p class="text-muted mb-1">Date fin des inscription: {{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d ') : '' }}</p><hr />
+                                <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p><hr />
+                                <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p><hr />
+                                <div>
+                                    <div class="card-body text-center">
+                                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
+                                           href="{{ path('app_travel_show', {'id': travel.id}) }}" >show</a>
+                                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
+                                           href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+                                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
+                                           href="{{ path('app_travel_register', {'id': travel.id}) }}">register</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                        <tr>
+                            <td colspan="8">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </div>
+            </div>
+        </section>
     <a href="{{ path('app_travel_new') }}">Create new</a>
 {% endblock %}

@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Travel;
+use App\Entity\User;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +36,7 @@ class TravelController extends AbstractController
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('travel/new.html.twig', [
+        return $this->render('travel/new.html.twig', [
             'travel' => $travel,
             'form' => $form,
         ]);
@@ -60,7 +62,7 @@ class TravelController extends AbstractController
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('travel/edit.html.twig', [
+        return $this->render('travel/edit.html.twig', [
             'travel' => $travel,
             'form' => $form,
         ]);
@@ -74,5 +76,9 @@ class TravelController extends AbstractController
         }
 
         return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/register/{id}',name: 'app_travel_register' )]
+    public function register(User $user, ){
+    return $this->redirectToRoute('app_main_index');
     }
 }
