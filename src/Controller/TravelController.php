@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Travel;
-use App\Entity\User;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,8 @@ class TravelController extends AbstractController
     #[Route('/', name: 'app_travel_index', methods: ['GET'])]
     public function index(TravelRepository $travelRepository): Response
     {
+
+
         return $this->render('travel/index.html.twig', [
             'travel' => $travelRepository->findAll(),
         ]);
@@ -84,7 +87,53 @@ class TravelController extends AbstractController
         return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
     }
     #[Route('/register/{id}',name: 'app_travel_register' )]
-    public function register(User $user, ){
-    return $this->redirectToRoute('app_main_index');
+    public function register(
+        EntityManagerInterface $entityManager,
+        $id, Request $request,
+        TravelRepository $travelRepository,
+    ): Response
+    {
+
+        $registered = false;
+
+        $currentUser = $this->getUser();
+        $travelToRegister = $travelRepository->find($id);
+
+
+
+        $statusId = $travelToRegister->getStatus()->getId();
+
+        if ($statusId!=2)
+        {
+            $this->addFlash('warning', 'STATUS ERROR : You cannot register to this travel it is not open for registration .');
+        }else {
+
+            foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
+                if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()){
+                    $this->addFlash('warning', 'ALREADY REGISTER ERROR : You have already registered for this travel');
+                    $registered = true;
+                }
+            }
+
+            $nbTravelers = count($travelToRegister->getSubscriptionedTravelers());
+            $Maxtraveler = $travelToRegister->getNbMaxTraveler();
+            if ($nbTravelers >= $Maxtraveler && !$registered){
+                $this->addFlash('warning', 'TRAVELERS ERROR : You cannot register to this travel : the maximum travelers has been reached');
+            }else{
+                $travelToRegister->addSubscriptionedTraveler($currentUser);
+                $entityManager->persist($travelToRegister);
+                $entityManager->flush();
+                $this->addFlash('success', 'You have registered for this travel');
+
+            }
+        }
+
+
+
+
+
+
+
+        return $this->redirectToRoute('app_travel_index');
     }
 }
