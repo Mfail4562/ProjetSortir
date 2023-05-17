@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Status;
 use App\Entity\Travel;
 use App\Entity\User;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\Mapping\Id;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,8 +88,34 @@ class TravelController extends AbstractController
 
         return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @throws ORMException
+     */
     #[Route('/register/{id}',name: 'app_travel_register' )]
-    public function register(User $user, ){
-    return $this->redirectToRoute('app_main_index');
+    public function register(User $user, $id,Request $request, TravelRepository $travelRepository, EntityManagerInterface $entityManager,Status $status )
+    {
+        $travel =$travelRepository->find($id);
+
+        $form = $this->createForm(TravelType::class, $travel);
+        $form->handleRequest($request);
+
+        $nbMaxTraveler=$travel->getNbMaxTraveler();
+        $status= $travel->getStatus();
+
+        if ($status === 'Ouvert' and count($travel->getSubscriptionedTravelers())< $nbMaxTraveler){
+            $travel->setNbMaxTraveler($this->$user());
+            if (count($travel->getSubscriptionedTravelers() === $nbMaxTraveler)){
+                $travel->setStatus($this->$status[3]);
+            }
+            $entityManager->persist($travel);
+            $entityManager->flush();
+            $this->addFlash('success','Vous étè bien inscrit pour la Sortie');
+            return $this->redirectToRoute('app_travel_index');
+        }
+        else{
+            $this->addFlash('warning','Vous n avait pas étè bien inscrit pour la Sortie');
+            return $this->redirectToRoute('app_travel_index');
+        }
     }
 }

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Travel inscription{% endblock %}
+
+{% block body %}
+    <div>
+        {{ form_start(travelForm)}}
+        {{ form_widget(travelForm) }}
+        <button>Create!</button>
+        {{ form_end(travelForm)}}
+    </div>
+    <a href="{{ path('app_travel_register') }}">s'inscrire</a>
+{% endblock %}
