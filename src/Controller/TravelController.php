@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Travel;
+use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -164,7 +165,7 @@ class TravelController extends AbstractController
     #[Route("/{id}/cancel'", name: 'cancel_travel', methods: ['GET', 'POST'])]
     public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
     {
-        $form = $this->createForm(TravelType::class, $travel);
+        $form = $this->createForm(TravelCancelType::class, $travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
