@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
+use App\Entity\Place;
 use App\Entity\Status;
 use App\Entity\Travel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -20,17 +22,22 @@ class TravelType extends AbstractType
             ->add('limitDateSubscription')
             ->add('nbMaxTraveler')
             ->add('infos')
-            ->add('leader')
-            ->add('subscriptionedTravelers')
-            ->add('status', EntityType::class,[
+            //     ->add('leader')
+            // ->add('subscriptionedTravelers')
+            ->add('status', EntityType::class, [
                 'class' => Status::class,
                 'choice_label' => 'wording',
                 'placeholder' => '--Choice any status--',
 
             ])
-            ->add('campusOrganiser')
-            ->add('place')
-        ;
+            ->add('campusOrganiser', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'name'
+            ])
+            ->add('place', EntityType::class, [
+                'class' => Place::class,
+                'choice_label' => 'name'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
