@@ -12,8 +12,10 @@
                     <div class="col-lg-4">
                         <div class="card mb-4 border-white">
                             <div class="card-body ">
+
                                 <img src="{{ asset('img/bgimg1.webp')}}"
                                         alt="avatar" class=" img-fluid">
+
                                 <h5 class="my-3">{{ travel.name }}</h5>
                                 <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p><hr />
                                 <p class="text-muted mb-1">Date debut du voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : ''}}</p><hr />

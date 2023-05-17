@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Status;
 use App\Entity\Travel;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
-use App\Repository\UserRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\Mapping\Id;
+use Psr\Container\ContainerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,6 +91,10 @@ class TravelController extends AbstractController
 
         return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @throws ORMException
+     */
     #[Route('/register/{id}',name: 'app_travel_register' )]
     public function register(
         EntityManagerInterface $entityManager,
