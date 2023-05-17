@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Status;
 use App\Entity\Travel;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,11 +91,11 @@ class TravelController extends AbstractController
      * @throws ORMException
      */
 
-    #[Route('/register/{id}',name: 'register' )]
+    #[Route('/register/{id}', name: 'register')]
     public function register(
         EntityManagerInterface $entityManager,
-        $id,
-        TravelRepository $travelRepository,
+                               $id,
+        TravelRepository       $travelRepository,
     ): Response
     {
         $registered = false;
@@ -112,12 +109,11 @@ class TravelController extends AbstractController
 
         $statusId = $travelToRegister->getStatus()->getId();
 
-        if ($statusId!=2)
-        {
+        if ($statusId != 2) {
             $this->addFlash('warning', 'STATUS ERROR : You cannot be register to this travel it is not open for registration .');
-        }else {
+        } else {
             foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
-                if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()){
+                if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()) {
                     $this->addFlash('warning', 'ALREADY REGISTERED ERROR : You have already been registered for this travel');
                     $registered = true;
                 }
@@ -151,18 +147,17 @@ class TravelController extends AbstractController
         $currentUser = $this->getUser();
         $travelToUnsubscribe = $travelRepository->find($id);
 
-        if ($travelToUnsubscribe->getSubscriptionedTravelers()->contains($currentUser)){
+        if ($travelToUnsubscribe->getSubscriptionedTravelers()->contains($currentUser)) {
             $travelToUnsubscribe->removeSubscriptionedTraveler($currentUser);
             $entityManager->persist($travelToUnsubscribe);
             $entityManager->flush();
 
-            $this->addFlash('succes', 'Your registration have been canceled');
+            $this->addFlash('success', 'Your registration have been canceled');
         }
 
 
         return $this->redirectToRoute('app_travel_index');
     }
-
 
 
     #[Route("/{id}/cancel'", name: 'cancel_travel', methods: ['GET', 'POST'])]
