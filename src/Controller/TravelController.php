@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Status;
 use App\Entity\Travel;
-use App\Entity\User;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\Id;
 use Psr\Container\ContainerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +23,10 @@ class TravelController extends AbstractController
     #[Route('/', name: 'app_travel_index', methods: ['GET'])]
     public function index(TravelRepository $travelRepository): Response
     {
+
+
         return $this->render('travel/index.html.twig', [
-            'travel' => $travelRepository->findAll(),
+            'travels' => $travelRepository->findAll(),
         ]);
     }
 
@@ -93,29 +96,45 @@ class TravelController extends AbstractController
      * @throws ORMException
      */
     #[Route('/register/{id}',name: 'app_travel_register' )]
-    public function register(User $user, $id,Request $request, TravelRepository $travelRepository, EntityManagerInterface $entityManager,Status $status )
+    public function register(
+        EntityManagerInterface $entityManager,
+        $id,
+        TravelRepository $travelRepository,
+    ): Response
     {
-        $travel =$travelRepository->find($id);
+        $registered = false;
+        $maxTravelersReached = false;
 
-        $form = $this->createForm(TravelType::class, $travel);
-        $form->handleRequest($request);
+        $currentUser = $this->getUser();
 
-        $nbMaxTraveler=$travel->getNbMaxTraveler();
-        $status= $travel->getStatus();
+        $travelToRegister = $travelRepository->find($id);
 
-        if ($status === 'Ouvert' and count($travel->getSubscriptionedTravelers())< $nbMaxTraveler){
-            $travel->setNbMaxTraveler($this->$user());
-            if (count($travel->getSubscriptionedTravelers() === $nbMaxTraveler)){
-                $travel->setStatus($this->$status[3]);
+        $statusId = $travelToRegister->getStatus()->getId();
+
+        if ($statusId!=2)
+        {
+            $this->addFlash('warning', 'STATUS ERROR : You cannot register to this travel it is not open for registration .');
+        }else {
+            foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
+                if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()){
+                    $this->addFlash('warning', 'ALREADY REGISTER ERROR : You have already registered for this travel');
+                    $registered = true;
+                }
             }
-            $entityManager->persist($travel);
-            $entityManager->flush();
-            $this->addFlash('success','Vous étè bien inscrit pour la Sortie');
-            return $this->redirectToRoute('app_travel_index');
+            if (!$registered) {
+                $nbTravelers = count($travelToRegister->getSubscriptionedTravelers());
+                $maxtraveler = $travelToRegister->getNbMaxTraveler();
+                if ($nbTravelers >= $maxtraveler) {
+                    $this->addFlash('warning', 'TRAVELERS ERROR : You cannot register to this travel : the maximum travelers has been reached');
+                    $maxTravelersReached = true;
+                } else {
+                    $travelToRegister->addSubscriptionedTraveler($currentUser);
+                    $entityManager->persist($travelToRegister);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'You have registered for this travel');
+                }
+            }
         }
-        else{
-            $this->addFlash('warning','Vous n avait pas étè bien inscrit pour la Sortie');
-            return $this->redirectToRoute('app_travel_index');
-        }
+        return $this->redirectToRoute('app_travel_index');
     }
 }
