@@ -21,7 +21,7 @@ class TravelController extends AbstractController
 
 
         return $this->render('travel/index.html.twig', [
-            'travel' => $travelRepository->findAll(),
+            'travels' => $travelRepository->findAll(),
         ]);
     }
 
@@ -126,8 +126,6 @@ class TravelController extends AbstractController
                 }
             }
         }
-        return $this->redirectToRoute('app_travel_index',[
-            
-        ]);
+        return $this->index($travelRepository);
     }
 }
