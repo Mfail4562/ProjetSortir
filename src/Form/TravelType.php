@@ -29,11 +29,11 @@ class TravelType extends AbstractType
 
                 ]
             ])
-            ->add('duration', ChoiceType::class, [
-                'choices' => [
-                    '30 minutes' => 30,
-                    '60 minutes' => 60,
-                    '90 minutes' => 90,]
+
+            ->add('duration',DateTimeType::class, [
+                'label' => 'Duration',
+                'widget'=> 'single_text'
+
             ])
             ->add('limitDateSubscription', DateType::class, [
                 'widget' => 'single_text'])
