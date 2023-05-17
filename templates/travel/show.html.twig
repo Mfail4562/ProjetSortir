@@ -9,7 +9,7 @@
         <div class="container py-5">
             <h1 class="text-center">Show Travel</h1>
             <div class="row">
-                <div class="card border-white">
+                <div class="card border-primary mb-3">
                     <img src="{{ asset('img/travelLogo/illustration.jpg') }}" alt="avatar-center"
                          class="rounded-circle img-fluid" style="width:150px">
                     <h5 class="my-3">{{ travel.name }}</h5>
@@ -34,14 +34,14 @@
             </div>
         </div>
     </section>
-    <section>
+    <section class="container-fluid ">
         <div>
             <p> Listes des participants a la sortie : {{ travel.name }}</p>
         </div>
-        <table class="table ">
+        <table class="table  ">
 
             <thead>
-            <tr>
+            <tr class="table-secondary">
                 <th>Pseudo</th>
                 <th>Name</th>
 
@@ -57,9 +57,4 @@
             </tbody>
         </table>
     </section>
-
-
-
-
-
 {% endblock %}
