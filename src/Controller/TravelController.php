@@ -34,7 +34,8 @@ class TravelController extends AbstractController
         $user = $this->getUser();
 
         $travel = new Travel();
-        $travel->setLeader($user);
+        $travel->setLeader($user)
+            ->setDateStart(new \DateTime('now'));
 
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
