@@ -49,6 +49,7 @@
                     <tr class="table-secondary">
                         <th>Pseudo</th>
                         <th>Name</th>
+                        <th>Profil</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,10 @@
                         <tr>
                             <td>{{ t.pseudo|upper }}</td>
                             <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
+
+                            <td>
+                                <a href="{{ path('app_user_show', {'id': t.id}) }}">show</a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
