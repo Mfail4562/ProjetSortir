@@ -27,8 +27,6 @@
                                            href="{{ path('app_travel_show', {'id': travel.id}) }}" >show</a>
                                         <a class="btn btn-secondary m-2 my-sm-0 text-muted "
                                            href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
-
-
                                         {% set subscribedUser = false %}
                                             {% for traveler in travel.subscriptionedTravelers %}
                                                {% if app.user.id == traveler.id %}
@@ -37,11 +35,9 @@
                                             {% endfor %}
                                             {% if subscribedUser %}
                                                 <a class="btn btn-secondary m-2 my-sm-0 text-muted ">unregister</a>
-                                            {% elseif travel.status.id == 2 %}
-                                                <a class="btn btn-secondary m-2 my-sm-0 text-muted " href="{{ path('app_travel_register') }}">register</a>
+                                            {% elseif travel.status.id == 2 and travel.subscriptionedTravelers.count < travel.nbMaxTraveler %}
+                                                <a class="btn btn-secondary m-2 my-sm-0 text-muted " href="{{ path('app_travel_register', {'id': travel.id }) }}">register</a>
                                             {% endif %}
-
-
                                     </div>
                                 </div>
                             </div>

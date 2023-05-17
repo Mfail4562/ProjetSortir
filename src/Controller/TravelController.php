@@ -126,6 +126,6 @@ class TravelController extends AbstractController
                 }
             }
         }
-        return $this->index($travelRepository);
+        return $this->redirectToRoute('app_travel_index');
     }
 }
