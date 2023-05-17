@@ -3,7 +3,6 @@
 {% block title %}Travel index{% endblock %}
 
 {% block body %}
-
     <h1 class="text-center">Travel index</h1>
         <section>
             <div class="container py-5">
@@ -13,8 +12,8 @@
                     <div class="col-lg-4">
                         <div class="card mb-4 border-white">
                             <div class="card-body ">
-                                <img src="assets/img/illustration.jpg"
-                                        alt="avatar" class="rounded-circle img-fluid">
+                                <img src="{{ asset('img/travelLogo/illustration.jpg') }}"
+                                        alt="avatar-center" class="rounded-circle img-fluid" class="center" style="width:150px">
                                 <h5 class="my-3">{{ travel.name }}</h5>
                                 <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p><hr />
                                 <p class="text-muted mb-1">Date debut du voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : ''}}</p><hr />
