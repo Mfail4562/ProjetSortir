@@ -3,29 +3,66 @@
 {% block title %}Travel{% endblock %}
 
 {% block body %}
-    <h1>Travel</h1>
+    <section>
         <div class="container py-5">
+            <h1 class="text-center">Show Travel</h1>
             <div class="row">
-                <div class="card border-white">
-                    <img src="{{ asset('img/travelLogo/illustration.jpg') }}" alt="avatar-center" class="rounded-circle img-fluid" style="width:150px">
+                <div class="card border-primary mb-3">
+                    <img src="{{ asset('img/travelLogo/illustration.jpg') }}" alt="avatar-center"
+                         class="rounded-circle img-fluid" style="width:150px">
                     <h5 class="my-3">{{ travel.name }}</h5>
-                    <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p><hr />
-                    <p class="text-muted mb-1">Date debut du voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : ''}}</p><hr />
-                    <p class="text-muted mb-1">Date fin du voyage: {{ travel.duration ? travel.duration|date('Y-m-d ') : '' }}</p><hr />
-                    <p class="text-muted mb-1">Date fin des inscription: {{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d ') : '' }}</p><hr />
-                    <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p><hr />
-                    <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p><hr/>
-                    {% for subscriptionedTravelers in travel %}
-                        <tr>
-                            <td>{{ subscriptionedTravelers.lastname }} {{ subscriptionedTravelers.firstname }}</td>
-                            <td>{{ subscriptionedTravelers.campus }} </td>
-                        </tr>
-                    {% endfor %}
-                    <div class="card-body text-center">
+                    <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p>
+                    <hr/>
+                    <p class="text-muted mb-1">Date debut du
+                        voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : '' }}</p>
+                    <hr/>
+                    <p class="text-muted mb-1">Date fin du
+                        voyage: {{ travel.duration ? travel.duration|date('Y-m-d ') : '' }}</p>
+                    <hr/>
+                    <p class="text-muted mb-1">Date fin des
+                        inscription: {{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d ') : '' }}</p>
+                    <hr/>
+                    <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p>
+                    <hr/>
+                    <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p>
+                    <hr/>
+
+                    <div class="mb-1">
                         <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
-                        {{ include('travel/_delete_form.html.twig') }}</a>
+                           href="{{ path('app_travel_index') }}">back to list</a>
+                        <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
+                           href="{{ path('app_travel_canceltravel', {'id': travel.id}) }}"> Cancel</a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+    <section>
+        <div class="container py-5">
+            <h1 class="text-center">Participant's List at {{ travel.name }}</h1>
+            <div class="row">
+                <table class="table  ">
+                    <thead>
+                    <tr class="table-secondary">
+                        <th>Pseudo</th>
+                        <th>Name</th>
+                        <th>Profil</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for t in travel.subscriptionedTravelers %}
+                        <tr>
+                            <td>{{ t.pseudo|upper }}</td>
+                            <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
+
+                            <td>
+                                <a href="{{ path('app_user_show', {'id': t.id}) }}">show</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 {% endblock %}

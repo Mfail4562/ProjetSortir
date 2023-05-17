@@ -55,12 +55,13 @@ class Travel
     #[ORM\JoinColumn(nullable: false)]
     private ?Place $place = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancelMessage = null;
+
 
 
     public function __construct()
     {
-        $this->usersTravels = new ArrayCollection();
-        $this->userTravelers = new ArrayCollection();
         $this->subscriptionedTravelers = new ArrayCollection();
     }
 
@@ -213,6 +214,18 @@ class Travel
     public function setPlace(?Place $place): self
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getCancelMessage(): ?string
+    {
+        return $this->cancelMessage;
+    }
+
+    public function setCancelMessage(?string $cancelMessage): self
+    {
+        $this->cancelMessage = $cancelMessage;
 
         return $this;
     }

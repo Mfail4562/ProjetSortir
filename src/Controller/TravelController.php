@@ -4,13 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Status;
 use App\Entity\Travel;
-use App\Entity\User;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\Mapping\Id;
-use Psr\Container\ContainerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +21,10 @@ class TravelController extends AbstractController
     #[Route('/', name: 'app_travel_index', methods: ['GET'])]
     public function index(TravelRepository $travelRepository): Response
     {
+
+
         return $this->render('travel/index.html.twig', [
-            'travel' => $travelRepository->findAll(),
+            'travels' => $travelRepository->findAll(),
         ]);
     }
 
@@ -39,7 +40,6 @@ class TravelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
 
 
             $travelRepository->save($travel, true);
@@ -58,6 +58,7 @@ class TravelController extends AbstractController
     {
         return $this->render('travel/show.html.twig', [
             'travel' => $travel,
+
         ]);
     }
 
@@ -82,7 +83,7 @@ class TravelController extends AbstractController
     #[Route('/{id}', name: 'app_travel_delete', methods: ['POST'])]
     public function delete(Request $request, Travel $travel, TravelRepository $travelRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$travel->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $travel->getId(), $request->request->get('_token'))) {
             $travelRepository->remove($travel, true);
         }
 
@@ -92,30 +93,69 @@ class TravelController extends AbstractController
     /**
      * @throws ORMException
      */
-    #[Route('/register/{id}',name: 'app_travel_register' )]
-    public function register(User $user, $id,Request $request, TravelRepository $travelRepository, EntityManagerInterface $entityManager,Status $status )
-    {
-        $travel =$travelRepository->find($id);
 
+    #[Route('/register/{id}',name: 'app_travel_register' )]
+    public function register(
+        EntityManagerInterface $entityManager,
+        $id,
+        TravelRepository $travelRepository,
+    ): Response
+    {
+        $registered = false;
+        $maxTravelersReached = false;
+
+
+        $currentUser = $this->getUser();
+
+        $travelToRegister = $travelRepository->find($id);
+
+
+        $statusId = $travelToRegister->getStatus()->getId();
+
+        if ($statusId!=2)
+        {
+            $this->addFlash('warning', 'STATUS ERROR : You cannot register to this travel it is not open for registration .');
+        }else {
+            foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
+                if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()){
+                    $this->addFlash('warning', 'ALREADY REGISTER ERROR : You have already registered for this travel');
+                    $registered = true;
+                }
+            }
+            if (!$registered) {
+                $nbTravelers = count($travelToRegister->getSubscriptionedTravelers());
+                $maxtraveler = $travelToRegister->getNbMaxTraveler();
+                if ($nbTravelers >= $maxtraveler) {
+                    $this->addFlash('warning', 'TRAVELERS ERROR : You cannot register to this travel : the maximum travelers has been reached');
+                    $maxTravelersReached = true;
+                } else {
+                    $travelToRegister->addSubscriptionedTraveler($currentUser);
+                    $entityManager->persist($travelToRegister);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'You have registered for this travel');
+                }
+            }
+
+        }
+        return $this->redirectToRoute('app_travel_index');
+    }
+
+    #[Route("/{id}/cancel'", name: 'app_travel_canceltravel', methods: ['GET', 'POST'])]
+    public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
+    {
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
 
-        $nbMaxTraveler=$travel->getNbMaxTraveler();
-        $status= $travel->getStatus();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $travelRepository->save($travel, true);
 
-        if ($status === 'Ouvert' and count($travel->getSubscriptionedTravelers())< $nbMaxTraveler){
-            $travel->setNbMaxTraveler($this->$user());
-            if (count($travel->getSubscriptionedTravelers() === $nbMaxTraveler)){
-                $travel->setStatus($this->$status[3]);
-            }
-            $entityManager->persist($travel);
-            $entityManager->flush();
-            $this->addFlash('success','Vous étè bien inscrit pour la Sortie');
-            return $this->redirectToRoute('app_travel_index');
+            return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
         }
-        else{
-            $this->addFlash('warning','Vous n avait pas étè bien inscrit pour la Sortie');
-            return $this->redirectToRoute('app_travel_index');
-        }
+
+        return $this->render('travel/cancel.html.twig', [
+            'travel' => $travel,
+            'form' => $form,
+        ]);
     }
+
 }
