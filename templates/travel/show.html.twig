@@ -29,32 +29,38 @@
                     <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p>
                     <hr/>
 
+                    <div class="mb-1">
+                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
+                           href="{{ path('app_travel_index') }}">back to list</a>
+                    </div>
+
 
                 </div>
             </div>
         </div>
     </section>
-    <section class="container-fluid ">
-        <div>
-            <p> Listes des participants a la sortie : {{ travel.name }}</p>
+
+    <section>
+        <div class="container py-5">
+            <h1 class="text-center">Participant's List at {{ travel.name }}</h1>
+            <div class="row">
+                <table class="table  ">
+                    <thead>
+                    <tr class="table-secondary">
+                        <th>Pseudo</th>
+                        <th>Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for t in travel.subscriptionedTravelers %}
+                        <tr>
+                            <td>{{ t.pseudo|upper }}</td>
+                            <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <table class="table  ">
-
-            <thead>
-            <tr class="table-secondary">
-                <th>Pseudo</th>
-                <th>Name</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            {% for t in travel.subscriptionedTravelers %}
-                <tr>
-                    <td>{{ t.pseudo|upper }}</td>
-                    <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
     </section>
 {% endblock %}
