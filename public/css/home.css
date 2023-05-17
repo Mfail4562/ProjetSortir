@@ -10,9 +10,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    background-image:linear-gradient(rgba(0,0,0,0.3), rgba(0,5,5,0.7)), url('../img/2.png');
-
-    background-size: cover;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 5, 5, 0.7)), url('../img/bgimg2.jpg') no-repeat center;
     color: black;
     font-family: "open sans";
     height: 100vh;

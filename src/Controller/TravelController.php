@@ -6,7 +6,6 @@ use App\Entity\Travel;
 use App\Entity\User;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,11 +25,18 @@ class TravelController extends AbstractController
     #[Route('/new', name: 'app_travel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, TravelRepository $travelRepository): Response
     {
+        $user = $this->getUser();
+
         $travel = new Travel();
+        $travel->setLeader($user);
+
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+
             $travelRepository->save($travel, true);
 
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
@@ -38,7 +44,7 @@ class TravelController extends AbstractController
 
         return $this->render('travel/new.html.twig', [
             'travel' => $travel,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
