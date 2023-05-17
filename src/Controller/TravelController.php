@@ -89,17 +89,16 @@ class TravelController extends AbstractController
     #[Route('/register/{id}',name: 'app_travel_register' )]
     public function register(
         EntityManagerInterface $entityManager,
-        $id, Request $request,
+        $id,
         TravelRepository $travelRepository,
     ): Response
     {
-
         $registered = false;
+        $maxTravelersReached = false;
 
         $currentUser = $this->getUser();
+
         $travelToRegister = $travelRepository->find($id);
-
-
 
         $statusId = $travelToRegister->getStatus()->getId();
 
@@ -107,33 +106,28 @@ class TravelController extends AbstractController
         {
             $this->addFlash('warning', 'STATUS ERROR : You cannot register to this travel it is not open for registration .');
         }else {
-
             foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
                 if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()){
                     $this->addFlash('warning', 'ALREADY REGISTER ERROR : You have already registered for this travel');
                     $registered = true;
                 }
             }
-
-            $nbTravelers = count($travelToRegister->getSubscriptionedTravelers());
-            $Maxtraveler = $travelToRegister->getNbMaxTraveler();
-            if ($nbTravelers >= $Maxtraveler && !$registered){
-                $this->addFlash('warning', 'TRAVELERS ERROR : You cannot register to this travel : the maximum travelers has been reached');
-            }else{
-                $travelToRegister->addSubscriptionedTraveler($currentUser);
-                $entityManager->persist($travelToRegister);
-                $entityManager->flush();
-                $this->addFlash('success', 'You have registered for this travel');
-
+            if (!$registered) {
+                $nbTravelers = count($travelToRegister->getSubscriptionedTravelers());
+                $maxtraveler = $travelToRegister->getNbMaxTraveler();
+                if ($nbTravelers >= $maxtraveler) {
+                    $this->addFlash('warning', 'TRAVELERS ERROR : You cannot register to this travel : the maximum travelers has been reached');
+                    $maxTravelersReached = true;
+                } else {
+                    $travelToRegister->addSubscriptionedTraveler($currentUser);
+                    $entityManager->persist($travelToRegister);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'You have registered for this travel');
+                }
             }
         }
-
-
-
-
-
-
-
-        return $this->redirectToRoute('app_travel_index');
+        return $this->redirectToRoute('app_travel_index',[
+            
+        ]);
     }
 }
