@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TravelRepository::class)]
 class Travel
@@ -29,6 +30,7 @@ class Travel
     private ?\DateTimeInterface $limitDateSubscription = null;
 
     #[ORM\Column]
+
     private ?int $nbMaxTraveler = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -53,12 +55,13 @@ class Travel
     #[ORM\JoinColumn(nullable: false)]
     private ?Place $place = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancelMessage = null;
+
 
 
     public function __construct()
     {
-        $this->usersTravels = new ArrayCollection();
-        $this->userTravelers = new ArrayCollection();
         $this->subscriptionedTravelers = new ArrayCollection();
     }
 
@@ -211,6 +214,18 @@ class Travel
     public function setPlace(?Place $place): self
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getCancelMessage(): ?string
+    {
+        return $this->cancelMessage;
+    }
+
+    public function setCancelMessage(?string $cancelMessage): self
+    {
+        $this->cancelMessage = $cancelMessage;
 
         return $this;
     }

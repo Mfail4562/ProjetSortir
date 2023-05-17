@@ -86,12 +86,45 @@
                                 <hr/>
                                 <div>
                                     <div class="card-body text-center">
-                                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
-                                           href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
-                                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
+                                        <a class="btn btn-outline-secondary m-2 my-sm-0 "
+                                           href="{{ path('app_travel_show', {'id': travel.id}) }}" >show</a>
+                                        <a class="btn btn-secondary m-2 my-sm-0 text-muted "
                                            href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
-                                        <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
-                                           href="{{ path('app_travel_register', {'id': travel.id}) }}">register</a>
+                                        {% set subscribedUser = false %}
+                                        {% for traveler in travel.subscriptionedTravelers %}
+                                            {% if app.user.id == traveler.id %}
+                                                {% set subscribedUser = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if subscribedUser %}
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-secondary m-2 my-sm-0 text-muted " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                unregister
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Unsubscribe from travel</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h5>Are you sure to unregister from this travel :</h5>
+                                                            <h5>{{ travel.name }}</h5>
+                                                            <p class="text-warning">this action can be permanently</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Keep registered</button>
+                                                            <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}" class="btn btn-outline-danger">Unregister</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elseif travel.status.id == 2 and travel.subscriptionedTravelers.count < travel.nbMaxTraveler %}
+                                            <a class="btn btn-secondary m-2 my-sm-0 text-muted " href="{{ path('app_travel_register', {'id': travel.id }) }}">register</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -102,8 +135,8 @@
                         <td colspan="8">no records found</td>
                     </tr>
                 {% endfor %}
-                </tbody>
             </div>
+        </div>
         </div>
     </section>
     <a href="{{ path('app_travel_new') }}">Create new</a>

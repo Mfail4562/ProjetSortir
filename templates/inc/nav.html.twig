@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand me-2" href={{ path('app_main_index') }}>
             <img
@@ -21,39 +21,40 @@
                         <span class="visually-hidden">(current)</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_place_index') }}" title="place">Place</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_campus_index') }}" title="campus">Campus</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_travel_index') }}" title="travel">Travel</a>
-                </li>
                 {% if app.user %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_user_show',{id:app.user.id}) }}" title="Profile">Profile
-
-                        ({{ app.user.pseudo }})</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.pseudo }}
-                        )</a>
-                </li>
-
-                {% if is_granted("ROLE_ADMIN") %}
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <li class="nav-item">
+                           <a class="nav-link" href="{{ path('app_place_index') }}" title="place">Place</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_campus_index') }}" title="campus">Campus</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link text-warning"
+                           href="{{ path('app_register') }}" title="Create account" role="button">Register new user</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>
+                        <a class="nav-link" href="{{ path('app_travel_index') }}" title="travel">Travel</a>
                     </li>
-                {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_user_show',{id:app.user.id}) }}" title="Profile">Profile
+
+                            ({{ app.user.pseudo }})</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.pseudo }}
+                            )</a>
+                    </li>
+
             </ul>
             {% else %}
                 <form class="d-flex align-items-center">
 
                     <a class="btn btn-secondary m-2 my-sm-0"
                        href="{{ path('app_login') }}" title="Login" role="button">Login</a>
-                    <a class="btn btn-secondary m-2 my-sm-0"
-                       href="{{ path('app_register') }}" title="Create account" role="button">Register</a>
                 </form>
                 
             {% endif %}

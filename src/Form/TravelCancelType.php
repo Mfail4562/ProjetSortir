@@ -17,12 +17,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
-class TravelType extends AbstractType
+class TravelCancelType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', TextType::class, [
+                'disabled' => true
             ])
             ->add('dateStart', DateTimeType::class, [
                 'widget' => 'single_text',

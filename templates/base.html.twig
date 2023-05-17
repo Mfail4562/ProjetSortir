@@ -17,15 +17,19 @@
 <header>
     {% include 'inc/nav.html.twig' %}
 </header>
-{# read and display all flash messages #}
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="flash flash-{{ label }}">
-            {{ message }}
-        </div>
+<div style="max-width: 50%" class="container-fluid align-self-auto">
+    {# read and display all flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="text-center  flash flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
-<body class="vh-100">
+</div>
+
+
+<body class="">
 <main>
     {% block body %}{% endblock %}
     {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
