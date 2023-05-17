@@ -8,8 +8,15 @@ use App\Entity\Status;
 use App\Entity\Travel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Range;
 
 class TravelType extends AbstractType
 {
@@ -17,11 +24,34 @@ class TravelType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('dateStart')
-            ->add('duration')
-            ->add('limitDateSubscription')
-            ->add('nbMaxTraveler')
-            ->add('infos')
+            ->add('dateStart', DateTimeType::class, [
+                'widget'=> 'single_text',
+                    'attr' => [
+                        'class' => 'form-control datetimepicker',
+
+                ]
+            ])
+            ->add('duration',ChoiceType::class, [
+                            'choices' => [
+                        '30 minutes' => 30,
+                        '60 minutes' => 60,
+                        '90 minutes' => 90,]
+            ])
+            ->add('limitDateSubscription',DateType::class, [
+                'widget'=>'single_text'])
+            ->add('nbMaxTraveler', ChoiceType::class, [
+                'label' => 'Maximum number of travelers',
+                'choices' => array_combine(range(0, 50), range(0, 50)),
+                'constraints' => [
+                    new Range([
+                        'min' => 0,
+                        'max' => 50,
+                ])
+                ]
+            ])
+            ->add('infos', TextareaType::class, [
+                'label' => 'Description'
+            ])
             //     ->add('leader')
             // ->add('subscriptionedTravelers')
             ->add('status', EntityType::class, [
@@ -37,6 +67,7 @@ class TravelType extends AbstractType
             ->add('place', EntityType::class, [
                 'class' => Place::class,
                 'choice_label' => 'name'
+
             ]);
     }
 
