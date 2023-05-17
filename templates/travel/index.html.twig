@@ -3,28 +3,91 @@
 {% block title %}Travel index{% endblock %}
 
 {% block body %}
+
+    <div>
+        <label for="litteration">Site</label>
+        <select name="litteration" id="litteration">
+            <option value="" {% if research == "" %}selected{% endif %}></option>
+            {% for camp in campus %}
+                <option value="{{ campus.id }}" {% if research == campus.id %} selected {% endif %}>{{ campus.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="margin-20">
+        <div class="dateStart">
+            <div>
+                <label for="dateFirs">Entre</label>
+                <input type="datetime-local" name="dateFirs" id="dateFirs" value="{{ dateStart }}">
+            </div>
+            <div>
+                <label for="dateEnd">Et</label>
+                <input type="datetime-local" name="dateEnd" id="dateEnd" value="{{ duration }}">
+            </div>
+        </div>
+        <div class="alert alert-danger" role="alert" {% if dateValid %} style="display:none;" {% endif %} >La date de
+            début doit être inférieur a la date de fin
+        </div>
+    </div>
+    </div>
+    <div>
+        <div>
+            <input type="checkbox" id="leaderTravel" name="leaderTravel" {% if lead %} checked {% endif %}>
+            <label for="leaderTravel">Sortie dont je suis l'organisateur/trice</label>
+        </div>
+
+        <div class="margin-10">
+            <input type="checkbox" id="travelSubscri" name="travelSubscri" {% if subscri %} checked {% endif %}>
+            <label for="travelSubscri">Sortie au quel je suis inscrit/e</label>
+        </div>
+
+        <div class="margin-10">
+            <input type="checkbox" id="travelDontSubscri"
+                   name="travelDontSubscri" {% if dontSubscri %} checked {% endif %}>
+            <label for="travelDontSubscri">Sortie au quel je ne suis pas inscrit/e</label>
+        </div>
+
+        <div class="margin-10">
+            <input type="checkbox" id="travelEnd" name="travelEnd" {% if endTravel %} checked {% endif %}>
+            <label for="travelEnd">Sortie passées</label>
+        </div>
+    </div>
+
+    <input class="btn btn-outline-primary" type="submit" name="recherche_site" value="Rechercher">
+    </div>
+
+
     <h1 class="text-center">Travel index</h1>
-        <section>
-            <div class="container py-5">
-                <div class="row">
-                    <tbody>
-                    {% for travel in travel %}
+    <section>
+        <div class="container py-5">
+            <div class="row">
+                <tbody>
+                {% for travel in travel %}
                     <div class="col-lg-4">
                         <div class="card mb-4 border-white">
                             <div class="card-body ">
                                 <img src="{{ asset('img/travelLogo/illustration.jpg') }}"
-                                        alt="avatar-center" class="rounded-circle img-fluid" class="center" style="width:150px">
+                                     alt="avatar-center" class="rounded-circle img-fluid" class="center"
+                                     style="width:150px">
                                 <h5 class="my-3">{{ travel.name }}</h5>
-                                <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p><hr />
-                                <p class="text-muted mb-1">Date debut du voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : ''}}</p><hr />
-                                <p class="text-muted mb-1">Date fin du voyage: {{ travel.duration ? travel.duration|date('Y-m-d ') : '' }}</p><hr />
-                                <p class="text-muted mb-1">Date fin des inscription: {{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d ') : '' }}</p><hr />
-                                <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p><hr />
-                                <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p><hr />
+                                <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Date debut du
+                                    voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : '' }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Date fin du
+                                    voyage: {{ travel.duration ? travel.duration|date('Y-m-d ') : '' }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Date fin des
+                                    inscription: {{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d ') : '' }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p>
+                                <hr/>
                                 <div>
                                     <div class="card-body text-center">
                                         <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
-                                           href="{{ path('app_travel_show', {'id': travel.id}) }}" >show</a>
+                                           href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
                                         <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
                                            href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
                                         <a class="btn btn-secondary m-2 my-sm-0" class="text-muted mb-1"
@@ -34,14 +97,14 @@
                             </div>
                         </div>
                     </div>
-                    {% else %}
-                        <tr>
-                            <td colspan="8">no records found</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </div>
+                {% else %}
+                    <tr>
+                        <td colspan="8">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </div>
-        </section>
+        </div>
+    </section>
     <a href="{{ path('app_travel_new') }}">Create new</a>
 {% endblock %}

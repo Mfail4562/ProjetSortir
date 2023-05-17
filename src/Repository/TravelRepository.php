@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Travel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @extends ServiceEntityRepository<Travel>
@@ -39,6 +40,111 @@ class TravelRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findByNonClos(): array
+    {
+        $today = date("Y-m-d H:i:s ");
+        $timestamp = strtotime($today);
+        $nextMonth = strtotime("last month", $timestamp);
+        $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
+        return $this->createQueryBuilder('s')
+            ->andWhere("s.dateFirs >= :monthPlusOne")
+            ->setParameter('monthPlusOne', $nextMonthDate)
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByNonClosCampus($id): array
+    {
+        $today = date("Y-m-d H:i:s ");
+        $timestamp = strtotime($today);
+        $nextMonth = strtotime("last month", $timestamp);
+        $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.leader', 'o')
+            ->andWhere("s.dateFirs >= :monthPlusOne")
+            ->setParameter('monthPlusOne', $nextMonthDate)
+            ->andWhere('o.campus = :campus')
+            ->setParameter('campus', $id)
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByResearch($param, $user): array
+    {
+        //initiation des date
+        $date = new DateTime();
+        $today = date("Y-m-d H:i:s ");
+        $timestamp = strtotime($today);
+        $nextMonth = strtotime("lastMonth", $timestamp);
+        $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
+        $query = $this->createQueryBuilder('s');
+
+        //recherche par nom
+        if ($param->get("litteration") != "") {
+            $query->innerJoin('s.leader', 'l');
+            $query->andWhere('l.campus = :camp');
+            $query->setParameter('campus', $param->get("litteration"));
+        }
+
+        // recherche par nom
+        if ($param->get("nameTravelRecherch") != "") {
+            $query->andWhere("s.name LIKE :name_travel");
+            $query->setParameter('name_travel', "%" . $param->get("nameTravelRecherch") . "%");
+        }
+
+        //recherche par date debut
+        if ($param->get("dateFirs") != "") {
+            $query->andWhere("s.dateFirs >= :dateFirs ");
+            $query->setParameter('dateFirs', $param->get("dateFirs"));
+
+        }
+        //recherche par date fin
+        if ($param->get("dateEnd") != "") {
+            $query->andWhere("s.dateFirs <= :dateEnd");
+            $query->setParameter('dateEnd', $param->get("dateEnd"));
+        }
+        //recherche par leader
+        if ($param->get("leaderTravel") != null) {
+            $query->andWhere("s.leader = :lead");
+            $query->setParameter('lead', $user->getId());
+        }
+
+        //recherche par inscription
+        if ($param->get("travelSubscri") != null || $param->get("travelDontSubscri") != null) {
+
+            if ($param->get("travelSubscri") != null && $param->get("travelDontSubscri") == null) {
+                $query->innerJoin('s.subscri', 'sub');
+                $query->andWhere('i.participate = :participate');
+                $query->setParameter('participate', $user->getId());
+            } else {
+                if ($param->get("travelSubscri") == null && $param->get("travelDontSubscri") != null) {
+                    $query->leftJoin('s.subscri', 'sub');
+                    $query->andWhere('s.participate != :participate or i.participate is null');
+                    $query->setParameter('participate', $user->getId());
+                }
+            }
+        }
+
+        //recherche des travel passée
+        if ($param->get("travelEnd") != null) {
+            $query->andWhere("s.dateFirs < :ended ");
+            $query->setParameter('ended', $date);
+        }
+
+        $query->andWhere("s.dateFirs >= :monthPlusOne");
+        $query->setParameter('monthPlusOne', $nextMonthDate);
+        $query->orderBy('s.dateFirs', 'ASC');
+        $requete = $query->getQuery();
+
+        return $requete->getResult();
+    }
+
+
+
+
 //    /**
 //     * @return Travel[] Returns an array of Travel objects
 //     */
@@ -55,7 +161,7 @@ class TravelRepository extends ServiceEntityRepository
 //    }
 
 //    public function findOneBySomeField($value): ?Travel
-//    {
+//{
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')
 //            ->setParameter('val', $value)

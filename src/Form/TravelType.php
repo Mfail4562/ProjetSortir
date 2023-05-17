@@ -22,8 +22,8 @@ class TravelType extends AbstractType
             ->add('limitDateSubscription')
             ->add('nbMaxTraveler')
             ->add('infos')
-            //     ->add('leader')
-            // ->add('subscriptionedTravelers')
+            ->add('leader')
+            ->add('subscriptionedTravelers')
             ->add('status', EntityType::class, [
                 'class' => Status::class,
                 'choice_label' => 'wording',
