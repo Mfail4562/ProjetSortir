@@ -9,8 +9,6 @@ use App\Repository\TravelRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\Mapping\Id;
-use Psr\Container\ContainerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +42,6 @@ class TravelController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-
             $travelRepository->save($travel, true);
 
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
@@ -61,6 +58,7 @@ class TravelController extends AbstractController
     {
         return $this->render('travel/show.html.twig', [
             'travel' => $travel,
+
         ]);
     }
 
@@ -85,7 +83,7 @@ class TravelController extends AbstractController
     #[Route('/{id}', name: 'app_travel_delete', methods: ['POST'])]
     public function delete(Request $request, Travel $travel, TravelRepository $travelRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$travel->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $travel->getId(), $request->request->get('_token'))) {
             $travelRepository->remove($travel, true);
         }
 
@@ -95,6 +93,7 @@ class TravelController extends AbstractController
     /**
      * @throws ORMException
      */
+
     #[Route('/register/{id}',name: 'app_travel_register' )]
     public function register(
         EntityManagerInterface $entityManager,
@@ -105,9 +104,11 @@ class TravelController extends AbstractController
         $registered = false;
         $maxTravelersReached = false;
 
+
         $currentUser = $this->getUser();
 
         $travelToRegister = $travelRepository->find($id);
+
 
         $statusId = $travelToRegister->getStatus()->getId();
 
@@ -134,7 +135,27 @@ class TravelController extends AbstractController
                     $this->addFlash('success', 'You have registered for this travel');
                 }
             }
+
         }
         return $this->redirectToRoute('app_travel_index');
     }
+
+    #[Route("/{id}/cancel'", name: 'app_travel_canceltravel', methods: ['GET', 'POST'])]
+    public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
+    {
+        $form = $this->createForm(TravelType::class, $travel);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $travelRepository->save($travel, true);
+
+            return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('travel/cancel.html.twig', [
+            'travel' => $travel,
+            'form' => $form,
+        ]);
+    }
+
 }
