@@ -14,14 +14,14 @@
     <link rel="icon" href="{{ asset('img/airplane.avif') }}">
     {% block extrastyles %}{% endblock %}
 </head>
-<header>0
+<header>
     {% include 'inc/nav.html.twig' %}
 </header>
 <div style="max-width: 50%" class="container-fluid align-self-auto">
     {# read and display all flash messages #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="text-center flash flash-{{ label }}">
+            <div class="text-center  flash flash-{{ label }}">
                 {{ message }}
             </div>
         {% endfor %}
