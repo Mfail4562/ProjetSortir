@@ -57,8 +57,6 @@ class Travel
 
     public function __construct()
     {
-        $this->usersTravels = new ArrayCollection();
-        $this->userTravelers = new ArrayCollection();
         $this->subscriptionedTravelers = new ArrayCollection();
     }
 
