@@ -174,7 +174,7 @@ class TravelController extends AbstractController
 
         return $this->render('travel/cancel.html.twig', [
             'travel' => $travel,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

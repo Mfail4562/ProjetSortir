@@ -11,8 +11,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,20 +23,20 @@ class TravelType extends AbstractType
         $builder
             ->add('name')
             ->add('dateStart', DateTimeType::class, [
-                'widget'=> 'single_text',
-                    'attr' => [
-                        'class' => 'form-control datetimepicker',
+                'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control datetimepicker',
 
                 ]
             ])
-            ->add('duration',ChoiceType::class, [
-                            'choices' => [
-                        '30 minutes' => 30,
-                        '60 minutes' => 60,
-                        '90 minutes' => 90,]
+            ->add('duration', ChoiceType::class, [
+                'choices' => [
+                    '30 minutes' => 30,
+                    '60 minutes' => 60,
+                    '90 minutes' => 90,]
             ])
-            ->add('limitDateSubscription',DateType::class, [
-                'widget'=>'single_text'])
+            ->add('limitDateSubscription', DateType::class, [
+                'widget' => 'single_text'])
             ->add('nbMaxTraveler', ChoiceType::class, [
                 'label' => 'Maximum number of travelers',
                 'choices' => array_combine(range(0, 50), range(0, 50)),
@@ -46,7 +44,7 @@ class TravelType extends AbstractType
                     new Range([
                         'min' => 0,
                         'max' => 50,
-                ])
+                    ])
                 ]
             ])
             ->add('infos', TextareaType::class, [
