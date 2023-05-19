@@ -21,13 +21,14 @@ class UserAdminType extends AbstractType
             ->add('lastname')
             ->add('firstname')
             ->add('phoneNumber')
-//            ->add('admin')
-//            ->add('actif');
+            //->add('admin')
+            ->add('actif')
             ->add('userCampus', EntityType::class, [
                     'class' => Campus::class,
                     'choice_label' => 'name'
                 ]
             );
+        //    ->add('roles');
 //            ->add('subscriptionedTravels');
     }
 

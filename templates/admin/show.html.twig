@@ -18,7 +18,8 @@
                             <h5 class="my-3">{{ user.pseudo }}</h5>
                             <p class="text-muted mb-1">{{ user.lastname }} {{ user.firstname }}</p>
                             {% if is_granted("ROLE_ADMIN") %}
-                                <div class="d-flex justify-content-center mb-2"><a href="{{ path('app_user_index') }}">back
+                                <div class="d-flex justify-content-center mb-2"><a
+                                            href="{{ path('app_admin_dashboard') }}">back
                                         to list</a>
                                 </div>
                             {% endif %}
