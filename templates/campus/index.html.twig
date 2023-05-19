@@ -3,33 +3,45 @@
 {% block title %}Campus index{% endblock %}
 
 {% block body %}
-    <h1>Campus index</h1>
+    <h1 class="text-center">Campus List</h1>
+    <section>
+        <div class="container py-5">
+            <div class="row">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for campus in campuses %}
-            <tr>
-                <td>{{ campus.id }}</td>
-                <td>{{ campus.name }}</td>
-                <td>
-                    <a href="{{ path('app_campus_show', {'id': campus.id}) }}">show</a>
-                    <a href="{{ path('app_campus_edit', {'id': campus.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+                {% for campus in campuses %}
+
+
+                    <div class="card mb-4 border-white">
+                        <div class="card-body text-center ">
+                            <img
+                                    src="{{ asset('img/travelLogo/campus-bis.png') }}"
+                                    alt="avatar" class="rounded-circle img-fluid"
+                                    style="width: 150px"/>
+                            <h5 class="my-3">{{ campus.name }}</h5>
+                            <p class="text-muted mb-1"> Campus of {{ campus.name }}</p>
+
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="{{ path('app_campus_show', {'id': campus.id}) }}">show</a>
+                            </div>
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="{{ path('app_campus_edit', {'id': campus.id}) }}">edit</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+
 
     <a href="{{ path('app_campus_new') }}">Create new</a>
 {% endblock %}
