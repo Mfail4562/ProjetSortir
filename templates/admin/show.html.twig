@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}AmdinProfileUser{% endblock %}
 
 {% block body %}
     <section class="border-white">
         <br>
-        <h1 class="text-center ">Admin {{ user.pseudo }}</h1>
+        <h1 class="text-center ">Admin Profile of {{ user.pseudo }}</h1>
         <div class="container py-5 border-white">
             <div class="row ">
                 <div class="col-lg-4 ">
@@ -20,7 +20,7 @@
                             {% if is_granted("ROLE_ADMIN") %}
                                 <div class="d-flex justify-content-center mb-2"><a
                                             href="{{ path('app_admin_dashboard') }}">back
-                                        to list</a>
+                                        to Admin list</a>
                                 </div>
                             {% endif %}
                             {% if app.user.id == user.id or is_granted("ROLE_ADMIN") %}
