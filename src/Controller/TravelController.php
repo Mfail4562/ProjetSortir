@@ -5,9 +5,10 @@
     use App\Entity\Travel;
     use App\Form\TravelCancelType;
     use App\Form\TravelType;
+    use App\Repository\StatusRepository;
     use App\Repository\TravelRepository;
     use App\Service\RegisterService;
-    use DateTime;
+    use DateTimeZone;
     use Doctrine\ORM\EntityManagerInterface;
     use Doctrine\ORM\Exception\ORMException;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,13 +19,36 @@
     #[Route('/travel', name: 'app_travel_')]
     class TravelController extends AbstractController
     {
+
         #[Route('/', name: 'index', methods: ['GET'])]
-        public function index(TravelRepository $travelRepository): Response
+        public function index(TravelRepository $travelRepository, StatusRepository $statusRepository): Response
         {
 
+            $allTravels = $travelRepository->findAll();
 
+            foreach ($allTravels as $travel) {
+                $newStatusId = 0;
+                $now = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+                if ($travel->getLimitDateSubscription() < $now) {
+                    $newStatusId = 3;
+                }
+
+                /*$dateEnd = new \DateTime()
+                if ($travel->getDateStart() < $now && $dateEnd < $now) {
+                    $newStatusId = 4;
+                }
+
+                if ($dateEnd < $now) {
+                    $newStatusId = 5;
+                }*/
+                if ($newStatusId != 0) {
+                    $newStatus = $statusRepository->find($newStatusId);
+                    $travel->setStatus($newStatus);
+                    $travelRepository->save($travel, true);
+                }
+            }
             return $this->render('travel/index.html.twig', [
-                'travels' => $travelRepository->findAll(),
+                'travels' => $allTravels,
             ]);
         }
 
@@ -36,7 +60,7 @@
 
             $travel = new Travel();
             $travel->setLeader($user)
-                ->setDateStart(new DateTime('now'));
+                ->setDateStart(new \DateTime('now', new DateTimeZone('Europe/Paris')));
 
             $form = $this->createForm(TravelType::class, $travel);
             $form->handleRequest($request);
