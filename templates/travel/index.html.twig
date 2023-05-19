@@ -4,6 +4,10 @@
 
 {% block body %}
 
+    <div class="div-recherche-travel">
+        {% include('travel/recherche.html.twig') with {'dateStart': 'bar', 'duration': 'bar', 'dateValid': 'bar', 'lead': 'bar', 'subscri': 'bar', 'dontSubscri': 'bar', 'endTravel': 'bar'} %}
+    </div>
+
     <h1 class="text-center">Travels List</h1>
         <section>
             <div class="container py-5">

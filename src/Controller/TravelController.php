@@ -207,7 +207,7 @@ class TravelController extends AbstractController
                 $contient = $request->query->get("nameTravelRecherch");
             }
             if ($request->query->get("dateFirs") != "") {
-                $dateStart = $request->query->get("dateFirs");
+                $dateStart = $request->query->get("dateStart");
             }
             if ($request->query->get("dateEnd") != "") {
                 $duration = $request->query->get("dateEnd");

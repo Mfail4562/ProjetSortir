@@ -63,7 +63,7 @@ class TravelRepository extends ServiceEntityRepository
         $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
         return $this->createQueryBuilder('s')
             ->innerJoin('s.leader', 'o')
-            ->andWhere("s.dateFirs >= :monthPlusOne")
+            ->andWhere("s.dateStart >= :monthPlusOne")
             ->setParameter('monthPlusOne', $nextMonthDate)
             ->andWhere('o.campus = :campus')
             ->setParameter('campus', $id)
@@ -96,14 +96,14 @@ class TravelRepository extends ServiceEntityRepository
         }
 
         //recherche par date debut
-        if ($param->get("dateFirs") != "") {
-            $query->andWhere("s.dateFirs >= :dateFirs ");
-            $query->setParameter('dateFirs', $param->get("dateFirs"));
+        if ($param->get("dateStart") != "") {
+            $query->andWhere("s.dateStart >= :dateFirs ");
+            $query->setParameter('dateStart', $param->get("dateStart"));
 
         }
         //recherche par date fin
         if ($param->get("dateEnd") != "") {
-            $query->andWhere("s.dateFirs <= :dateEnd");
+            $query->andWhere("s.dateStart <= :dateEnd");
             $query->setParameter('dateEnd', $param->get("dateEnd"));
         }
         //recherche par leader
