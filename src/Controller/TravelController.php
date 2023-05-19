@@ -41,6 +41,7 @@
                 if ($dateEnd < $now) {
                     $newStatusId = 5;
                 }*/
+
                 if ($newStatusId != 0) {
                     $newStatus = $statusRepository->find($newStatusId);
                     $travel->setStatus($newStatus);
