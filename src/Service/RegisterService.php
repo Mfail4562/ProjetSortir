@@ -35,7 +35,7 @@
             if ($statusId != 2 && $travelToRegister->getLeader()->getId() != $user->getId()) {
                 $request->getSession()->getFlashBag()->add('warning', 'STATUS ERROR : You cannot be register to this travel it is not open for registration .');
             } else {
-                if ($travelToRegister->getLimitDateSubscription() < new DateTime()) {
+                if ($travelToRegister->getLimitDateSubscription() < new DateTime() && $travelToRegister->getLeader()->getId() != $user->getId()) {
                     $request->getSession()->getFlashBag()->add('warning', 'CLOSURE ERROR : You cannot be register to this travel it is not open for registration .');
                 } else {
                     foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
@@ -61,7 +61,7 @@
                 }
 
             }
-           
+
 
         }
 
