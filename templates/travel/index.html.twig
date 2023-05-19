@@ -36,8 +36,10 @@
                                     <div class="card-body text-center">
                                         <a class="btn btn-outline-secondary m-2 my-sm-0 "
                                            href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
-                                        <a class="btn btn-secondary m-2 my-sm-0 text-muted "
-                                           href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+                                        {% if is_granted("ROLE_ORGANISER") %}
+                                            <a class="btn btn-secondary m-2 my-sm-0 text-muted "
+                                               href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+                                        {% endif %}
                                         {% set subscribedUser = false %}
                                         {% for traveler in travel.subscriptionedTravelers %}
                                             {% if app.user.id == traveler.id %}
