@@ -70,7 +70,10 @@ class TravelController extends AbstractController
         $dontSubscri = false;
         $endTravel = false;
         $dateValid = true;
+
+
         if ($request->query->get("campusResearch")) {
+            //recherche par nom
             if ($request->query->get("dateEnd") != "" && $request->query->get("dateFirs") != "" && $request->query->get("dateEnd") < $request->query->get("dateFirs")) {
                 $dateValid = false;
             } else {

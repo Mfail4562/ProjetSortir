@@ -48,7 +48,7 @@ class TravelRepository extends ServiceEntityRepository
         $nextMonth = strtotime("last month", $timestamp);
         $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
         return $this->createQueryBuilder('s')
-            ->andWhere("s.dateFirs >= :monthPlusOne")
+            ->andWhere("s.date_start >= :monthPlusOne")
             ->setParameter('monthPlusOne', $nextMonthDate)
             ->orderBy('s.id', 'ASC')
             ->getQuery()
@@ -84,8 +84,8 @@ class TravelRepository extends ServiceEntityRepository
 
         //recherche par nom
         if ($param->get("litteration") != "") {
-            $query->innerJoin('s.leader', 'l');
-            $query->andWhere('l.campus = :camp');
+            $query->innerJoin('s.leader', 's');
+            $query->andWhere('o.campus = :camp');
             $query->setParameter('campus', $param->get("litteration"));
         }
 
