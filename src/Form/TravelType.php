@@ -33,8 +33,9 @@ class TravelType extends AbstractType
             ])
 
             ->add('duration',DateTimeType::class, [
+
                 'label' => 'Duration',
-                'widget'=> 'single_text'
+                'widget'=> 'single_text',
 
             ])
             ->add('limitDateSubscription', DateType::class, [

@@ -21,15 +21,13 @@
                                 <div class="d-flex justify-content-center mb-2"><a href="{{ path('app_user_index') }}">back
                                         to list</a>
                                 </div>
+                            {% endif %}
+                            {% if app.user.id == user.id or is_granted("ROLE_ADMIN") %}
                                 <div class="d-flex justify-content-center mb-2"><a
                                             href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
                                 </div>
                             {% endif %}
-                            {% if app.user.id == user.id %}
-                                <div class="d-flex justify-content-center mb-2"><a
-                                            href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                                </div>
-                            {% endif %}
+
                         </div>
                     </div>
                 </div>

@@ -6,8 +6,10 @@ use App\Entity\Travel;
 use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+use App\Service\RegisterService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,8 +29,9 @@ class TravelController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, TravelRepository $travelRepository): Response
+    public function new(Request $request, TravelRepository $travelRepository, RegisterService $registerService, EntityManagerInterface $entityManager): Response
     {
+        define('CREATING_MESSAGE' , 'creation et inscription automatique :');
         $user = $this->getUser();
 
         $travel = new Travel();
@@ -43,8 +46,11 @@ class TravelController extends AbstractController
 
             $travelRepository->save($travel, true);
 
+            $registerService->RegisterToTravel($entityManager, $travel->getId(), $travelRepository, $user ,$request, CREATING_MESSAGE);
+
             return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->render('travel/new.html.twig', [
             'travel' => $travel,
@@ -98,43 +104,15 @@ class TravelController extends AbstractController
         EntityManagerInterface $entityManager,
                                $id,
         TravelRepository       $travelRepository,
+        RegisterService $registerService,
+        Request $request
     ): Response
     {
-        $registered = false;
-        $maxTravelersReached = false;
-
-
+        define('REGISTERING_MESSAGE' , 'inscription :');
         $currentUser = $this->getUser();
 
-        $travelToRegister = $travelRepository->find($id);
+        $registerService->RegisterToTravel($entityManager, $id, $travelRepository, $currentUser,$request, REGISTERING_MESSAGE);
 
-
-        $statusId = $travelToRegister->getStatus()->getId();
-
-        if ($statusId != 2) {
-            $this->addFlash('warning', 'STATUS ERROR : You cannot be register to this travel it is not open for registration .');
-        } else {
-            foreach ($travelToRegister->getSubscriptionedTravelers() as $traveler) {
-                if ($traveler->getUserIdentifier() === $currentUser->getUserIdentifier()) {
-                    $this->addFlash('warning', 'ALREADY REGISTERED ERROR : You have already been registered for this travel');
-                    $registered = true;
-                }
-            }
-            if (!$registered) {
-                $nbTravelers = count($travelToRegister->getSubscriptionedTravelers());
-                $maxtraveler = $travelToRegister->getNbMaxTraveler();
-                if ($nbTravelers >= $maxtraveler) {
-                    $this->addFlash('warning', 'TRAVELERS ERROR : You cannot be register to this travel : the maximum travelers has been reached');
-                    $maxTravelersReached = true;
-                } else {
-                    $travelToRegister->addSubscriptionedTraveler($currentUser);
-                    $entityManager->persist($travelToRegister);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'You have been registered for this travel');
-                }
-            }
-
-        }
         return $this->redirectToRoute('app_travel_index');
     }
 
