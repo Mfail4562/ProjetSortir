@@ -23,25 +23,40 @@ class TravelCancelType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'disabled' => true
-            ])
-            ->add('dateStart', DateTimeType::class, [
-                'widget' => 'single_text',
+                'label' => false,
                 'attr' => [
-                    'class' => 'form-control datetimepicker',
+                    'hidden' => true,
 
                 ]
             ])
+            ->add('dateStart', DateTimeType::class, [
+                'label' => false,
+                'widget' => 'single_text',
+                'attr' => [
+                    'hidden' => true,
 
-            ->add('duration',DateTimeType::class, [
-                'label' => 'Duration',
-                'widget'=> 'single_text'
+                ]
+            ])
+            ->add('duration', DateTimeType::class, [
+                'label' => false,
+                'widget' => 'single_text',
+                'attr' => [
+                    'hidden' => true,
+
+                ]
 
             ])
             ->add('limitDateSubscription', DateType::class, [
-                'widget' => 'single_text'])
+                'label' => false,
+                'widget' => 'single_text',
+                'attr' => [
+                    'hidden' => true,
+
+                ]
+            ])
             ->add('nbMaxTraveler', ChoiceType::class, [
-                'label' => 'Maximum number of travelers',
+                'label' => false,
+                'attr' => ['hidden' => true],
                 'choices' => array_combine(range(0, 50), range(0, 50)),
                 'constraints' => [
                     new Range([
@@ -51,21 +66,41 @@ class TravelCancelType extends AbstractType
                 ]
             ])
             ->add('infos', TextareaType::class, [
-                'label' => 'Description'
+                'label' => false,
+                'attr' => [
+                    'hidden' => true,
+
+                ]
+
             ])
             ->add('status', EntityType::class, [
                 'class' => Status::class,
                 'choice_label' => 'wording',
-                'placeholder' => '--Choice any status--',
+
 
             ])
             ->add('campusOrganiser', EntityType::class, [
+                'disabled' => true,
                 'class' => Campus::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'label' => false,
+                'attr' => [
+                    'hidden' => true,
+
+                ]
             ])
             ->add('place', EntityType::class, [
+                'disabled' => true,
                 'class' => Place::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'label' => false,
+                'attr' => [
+                    'hidden' => true,
+
+                ]
+
+            ])->add('cancelMessage', TextareaType::class, [
+                'label' => 'Cancel motif'
 
             ]);
     }
