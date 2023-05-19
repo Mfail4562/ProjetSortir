@@ -17,10 +17,11 @@
                                     style="width: 150px"/>
                             <h5 class="my-3">{{ campus.name }}</h5>
 
+                            <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
+                               href="{{ path('app_campus_index') }}">back to Campus list</a>
+                            <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
+                               href="{{ path('app_campus_edit', {'id': campus.id}) }}">edit Campus</a>
 
-                            <a href="{{ path('app_campus_index') }}">back to list</a>
-
-                            <a href="{{ path('app_campus_edit', {'id': campus.id}) }}">edit</a>
 
                             {{ include('campus/_delete_form.html.twig') }}
                         </div>
