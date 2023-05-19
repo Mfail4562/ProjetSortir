@@ -65,8 +65,11 @@
 
         public function addToTxtFollowing(string $message, User $user, Travel $travel): void
         {
-
-            file_put_contents("following_travel_file/following_register_travel_id_" . $travel->getId(), $message . $user->getPseudo() . " s'inscrit au voyage : " . $travel->getName() . " --> id : " . $travel->getId() . " : " . date_format(new DateTime('now', new DateTimeZone('Europe/Paris')), 'd/m/y H:i') . "\n", FILE_APPEND);
+            if (str_contains($message, "désinscription")) {
+                file_put_contents("following_travel_file/following_register_travel_id_" . $travel->getId(), $message . $user->getPseudo() . " se désinscrit du voyage : " . $travel->getName() . " --> id : " . $travel->getId() . " : " . date_format(new DateTime('now', new DateTimeZone('Europe/Paris')), 'd/m/y H:i') . "\n", FILE_APPEND);
+            } else {
+                file_put_contents("following_travel_file/following_register_travel_id_" . $travel->getId(), $message . $user->getPseudo() . " s'inscrit au voyage : " . $travel->getName() . " --> id : " . $travel->getId() . " : " . date_format(new DateTime('now', new DateTimeZone('Europe/Paris')), 'd/m/y H:i') . "\n", FILE_APPEND);
+            }
         }
 
     }
