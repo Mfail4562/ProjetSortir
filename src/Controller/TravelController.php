@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Controller;
+    namespace App\Controller;
 
-use App\Entity\Travel;
-use App\Form\TravelCancelType;
-use App\Form\TravelType;
- use App\Repository\StatusRepository;
-use App\Repository\TravelRepository;
-use App\Service\RegisterService;
-use DateTime;
- use DateTimeZone;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+    use App\Entity\Travel;
+    use App\Form\TravelCancelType;
+    use App\Form\TravelType;
+    use App\Repository\StatusRepository;
+    use App\Repository\TravelRepository;
+    use App\Service\RegisterService;
+    use DateTimeZone;
+    use Doctrine\ORM\EntityManagerInterface;
+    use Doctrine\ORM\Exception\ORMException;
+    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/travel', name: 'app_travel_')]
-class TravelController extends AbstractController
-{
-    #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(TravelRepository $travelRepository): Response
-
+    #[Route('/travel', name: 'app_travel_')]
+    class TravelController extends AbstractController
     {
 
         #[Route('/', name: 'index', methods: ['GET'])]
@@ -37,11 +32,6 @@ class TravelController extends AbstractController
                 if ($travel->getLimitDateSubscription() < $now) {
                     $newStatusId = 3;
                 }
-
-
-        $travel = new Travel();
-        $travel->setLeader($user)
-            ->setDateStart(new DateTime('now'));
 
                 /*$dateEnd = new \DateTime()
                 if ($travel->getDateStart() < $now && $dateEnd < $now) {
@@ -182,11 +172,11 @@ class TravelController extends AbstractController
         }
 
 
-    #[Route("/{id}/cancel'", name: 'cancel_travel', methods: ['GET', 'POST'])]
-    public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
-    {
-        $form = $this->createForm(TravelCancelType::class, $travel);
-        $form->handleRequest($request);
+        #[Route("/cancel/{id}", name: 'cancel_travel', methods: ['GET', 'POST'])]
+        public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
+        {
+            $form = $this->createForm(TravelCancelType::class, $travel);
+            $form->handleRequest($request);
 
 
             if ($form->isSubmitted() && $form->isValid()) {
