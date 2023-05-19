@@ -51,78 +51,14 @@ class TravelController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
     #[Route('/{id}', name: 'app_travel_show', methods: ['GET'])]
-    public function show(Request $request, Travel $travel, TravelRepository $travelRepository, $dateStart, EntityManagerInterface $entityManager, $status, $statusRepository): Response
+    public function show(Travel $travel): Response
     {
-        $user = $this->getUser();
-
-        $today = date("Y-m-d H:i:s");
-        $travelCampus = $travelRepository->findByNonClosCampus($user->getCampus()->getId());
-        $travel = $travelRepository->findByNonClos();
-        $campus = $travelRepository->findAll();
-        $research = "";
-        $contient = null;
-        $dateStart = null;
-        $duration = null;
-        $lead = false;
-        $subscri = false;
-        $dontSubscri = false;
-        $endTravel = false;
-        $dateValid = true;
-
-
-        if ($request->query->get("campusResearch")) {
-            //recherche par nom
-            if ($request->query->get("dateEnd") != "" && $request->query->get("dateFirs") != "" && $request->query->get("dateEnd") < $request->query->get("dateFirs")) {
-                $dateValid = false;
-            } else {
-                $travel = $travelRepository->findByResearch($request->query, $this->getUser());
-            }
-            if ($request->query->get("litteration") != "") {
-                $research = $request->query->get("litteration");
-            }
-            if ($request->query->get("nameTravelRecherch") != "") {
-                $contient = $request->query->get("nameTravelRecherch");
-            }
-            if ($request->query->get("dateFirs") != "") {
-                $dateStart = $request->query->get("dateFirs");
-            }
-            if ($request->query->get("dateEnd") != "") {
-                $duration = $request->query->get("dateEnd");
-            }
-            if ($request->query->get("leaderTravel") != null) {
-                $lead = true;
-            }
-            if ($request->query->get("travelSubscri") != null) {
-                $subscri = true;
-            }
-
-            if ($request->query->get("travelDontSubscri") != null) {
-                $dontSubscri = true;
-            }
-            if ($request->query->get("travelEnd") != null) {
-                $endTravel = true;
-            }
-        }
-        return $this->render('travel/index.html.twig', [
-            'travel' => $travel,
-            'travelCampus' => $travelCampus,
-            'campus' => $campus,
-            'research' => $research,
-            'contient' => $contient,
-            'dateStart' => $dateStart,
-            'duration' => $duration,
-            'lead' => $lead,
-            'subscri' => $subscri,
-            'dontSubscri' => $dontSubscri,
-            'travelEnd' => $endTravel,
-            'today' => $today,
-            'dateValid' => $dateValid,
-        ]);
+        return $this->render('travel/show.html.twig', [
+        'travel' => $travel,
+     ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Travel $travel, TravelRepository $travelRepository): Response
     {
         $form = $this->createForm(TravelType::class, $travel);
@@ -235,5 +171,76 @@ class TravelController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/{id}', name: 'app_travel_recherche', methods: ['GET'])]
+    public function recherche(Request $request, Travel $travel, TravelRepository $travelRepository, $dateStart, EntityManagerInterface $entityManager, $status, $statusRepository): Response
+    {
+        $user = $this->getUser();
+
+        $today = date("Y-m-d H:i:s");
+        $travelCampus = $travelRepository->findByNonClosCampus($user->getCampus()->getId());
+        $travel = $travelRepository->findByNonClos();
+        $campus = $travelRepository->findAll();
+        $research = "";
+        $contient = null;
+        $dateStart = null;
+        $duration = null;
+        $lead = false;
+        $subscri = false;
+        $dontSubscri = false;
+        $endTravel = false;
+        $dateValid = true;
+
+
+        if ($request->query->get("campusResearch")) {
+            //recherche par nom
+            if ($request->query->get("dateEnd") != "" && $request->query->get("dateFirs") != "" && $request->query->get("dateEnd") < $request->query->get("dateFirs")) {
+                $dateValid = false;
+            } else {
+                $travel = $travelRepository->findByResearch($request->query, $this->getUser());
+            }
+            if ($request->query->get("litteration") != "") {
+                $research = $request->query->get("litteration");
+            }
+            if ($request->query->get("nameTravelRecherch") != "") {
+                $contient = $request->query->get("nameTravelRecherch");
+            }
+            if ($request->query->get("dateFirs") != "") {
+                $dateStart = $request->query->get("dateFirs");
+            }
+            if ($request->query->get("dateEnd") != "") {
+                $duration = $request->query->get("dateEnd");
+            }
+            if ($request->query->get("leaderTravel") != null) {
+                $lead = true;
+            }
+            if ($request->query->get("travelSubscri") != null) {
+                $subscri = true;
+            }
+
+            if ($request->query->get("travelDontSubscri") != null) {
+                $dontSubscri = true;
+            }
+            if ($request->query->get("travelEnd") != null) {
+                $endTravel = true;
+            }
+        }
+        return $this->render('travel/index.html.twig', [
+            'travel' => $travel,
+            'travelCampus' => $travelCampus,
+            'campus' => $campus,
+            'research' => $research,
+            'contient' => $contient,
+            'dateStart' => $dateStart,
+            'duration' => $duration,
+            'lead' => $lead,
+            'subscri' => $subscri,
+            'dontSubscri' => $dontSubscri,
+            'travelEnd' => $endTravel,
+            'today' => $today,
+            'dateValid' => $dateValid,
+        ]);
+    }
+
 
 }

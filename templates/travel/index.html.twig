@@ -3,9 +3,11 @@
 {% block title %}Travel index{% endblock %}
 
 {% block body %}
+
     <div class="div-recherche-travel">
-        {% include 'travel/show.html.twig' %}
+        {% include ':travel:recherche.html.twig' %}
     </div>
+
     {% for travel in travel %}
         <div class="col-lg-4">
             <div class="card mb-4 border-white">
@@ -88,9 +90,5 @@
             <td colspan="8">no records found</td>
         </tr>
     {% endfor %}
-    </div>
-    </div>
-    </div>
-    </section>
     <a href="{{ path('app_travel_new') }}">Create new</a>
 {% endblock %}
