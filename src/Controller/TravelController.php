@@ -51,7 +51,7 @@ class TravelController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/{id}', name: 'app_travel_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Travel $travel): Response
     {
         return $this->render('travel/show.html.twig', [
@@ -59,6 +59,7 @@ class TravelController extends AbstractController
      ]);
     }
 
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Travel $travel, TravelRepository $travelRepository): Response
     {
         $form = $this->createForm(TravelType::class, $travel);
@@ -89,7 +90,7 @@ class TravelController extends AbstractController
     /**
      * @throws ORMException
      */
-    #[Route('/register/{id}', name: 'app_travel_register')]
+    #[Route('/register/{id}',name: 'register' )]
     public function register(User $user, $id, Request $request, TravelRepository $travelRepository, EntityManagerInterface $entityManager, Status $status)
     {
         $registered = false;
