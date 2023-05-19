@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Travel;
+use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +34,7 @@ class TravelController extends AbstractController
 
         $travel = new Travel();
         $travel->setLeader($user)
-            ->setDateStart(new \DateTime('now'));
+            ->setDateStart(new DateTime('now'));
 
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
@@ -164,7 +166,7 @@ class TravelController extends AbstractController
     #[Route("/{id}/cancel'", name: 'cancel_travel', methods: ['GET', 'POST'])]
     public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
     {
-        $form = $this->createForm(TravelType::class, $travel);
+        $form = $this->createForm(TravelCancelType::class, $travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
