@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1 class="text-center">List User</h1>
+    <h1 class="text-center">Admin List User</h1>
     <section>
         <div class="container py-5">
             <div class="row">
@@ -22,9 +22,9 @@
                                 <p class="text-muted mb-1">Email : {{ user.email }}</p>
                                 <p class="text-muted mb-4">Campus : {{ user.userCampus.name }}</p>
                                 <p class="text-muted mb-1"><a
-                                            href="{{ path('app_user_show', {'id': user.id}) }}">show</a></p>
+                                            href="{{ path('app_admin_user_show', {'id': user.id}) }}">show</a></p>
                                 <p class="text-muted mb-1"><a
-                                            href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a></p>
+                                            href="{{ path('app_admin_userEdit', {'id': user.id}) }}">edit</a></p>
                             </div>
                         </div>
                     </div>
