@@ -78,6 +78,7 @@ class TravelCancelType extends AbstractType
                 'choice_label' => 'wording',
 
 
+
             ])
             ->add('campusOrganiser', EntityType::class, [
                 'disabled' => true,
@@ -101,6 +102,7 @@ class TravelCancelType extends AbstractType
 
             ])->add('cancelMessage', TextareaType::class, [
                 'label' => 'Cancel motif'
+
 
             ]);
     }
