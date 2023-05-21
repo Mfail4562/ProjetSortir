@@ -3,39 +3,34 @@
 {% block title %}Place index{% endblock %}
 
 {% block body %}
-    <h1>Place index</h1>
+    <h1 class="text-center">Place List</h1>
+    <section>
+        <div class="container py-5">
+            <div class="row">
+                {% for place in places %}
+                    <div class="card mb-4 border-white">
+                        <div class="card-body text-center ">
+                            <img
+                                    src="{{ asset('img/travelLogo/place.jpg') }}"
+                                    alt="avatar" class="rounded-circle img-fluid"
+                                    style="width: 150px"/>
+                            <h5 class="my-3">{{ place.name }}</h5>
+                            <p class="text-muted mb-1"> Street : {{ place.street }}</p>
+                            <p class="text-muted mb-1"> Latitude : {{ place.latitude }}</p>
+                            <p class="text-muted mb-1"> Longitude : {{ place.longitude }}</p>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Street</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for place in places %}
-            <tr>
-                <td>{{ place.id }}</td>
-                <td>{{ place.name }}</td>
-                <td>{{ place.street }}</td>
-                <td>{{ place.latitude }}</td>
-                <td>{{ place.longitude }}</td>
-                <td>
-                    <a href="{{ path('app_place_show', {'id': place.id}) }}">show</a>
-                    <a href="{{ path('app_place_edit', {'id': place.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="{{ path('app_place_show', {'id': place.id}) }}">show</a>
+                            </div>
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="{{ path('app_place_edit', {'id': place.id}) }}">edit</a>
+                            </div>
+                        </div>
+                    </div>
 
+                {% endfor %}
+            </div>
+        </div>
+    </section>
     <a href="{{ path('app_place_new') }}">Create new</a>
 {% endblock %}
