@@ -9,6 +9,7 @@
     use App\Repository\TravelRepository;
     use App\Service\RegisterService;
     use DateTimeZone;
+    use Doctrine\Common\Collections\ArrayCollection;
     use Doctrine\ORM\EntityManagerInterface;
     use Doctrine\ORM\Exception\ORMException;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@
     class TravelController extends AbstractController
     {
 
-       #[Route('/', name: 'index', methods: ['GET'])]
+        #[Route('/', name: 'index', methods: ['GET'])]
         public function index(TravelRepository $travelRepository, StatusRepository $statusRepository): Response
         {
 
