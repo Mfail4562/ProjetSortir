@@ -36,7 +36,6 @@
                 ->add('duration', TimeType::class, [
                     'label' => 'Duration',
                     'widget' => 'choice',
-
                 ])
                 ->add('limitDateSubscription', DateType::class, [
                     'widget' => 'single_text'])

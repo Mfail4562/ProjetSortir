@@ -21,7 +21,7 @@
     class TravelController extends AbstractController
     {
 
-        #[Route('/', name: 'index', methods: ['GET'])]
+      #[Route('/', name: 'index', methods: ['GET'])]
         public function index(TravelRepository $travelRepository, StatusRepository $statusRepository): Response
         {
 
