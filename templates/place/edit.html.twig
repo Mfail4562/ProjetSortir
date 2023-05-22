@@ -3,11 +3,19 @@
 {% block title %}Edit Place{% endblock %}
 
 {% block body %}
-    <h1>Edit Place</h1>
+    <h1 class="text-center">Edit Place</h1>
+    <div class="card-body px-4 py-5 px-md-5">
+        <div class="row">
+            <div class="mx-auto col-10 col-md-8 col-lg-6">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button class="btn btn-secondary">{{ button_label|default('Update place') }}</button>
+                <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1" href="{{ path('app_place_index') }}">back to
+                    Place list</a>
+                {{ form_end(form) }}
+                {{ include('place/_delete_form.html.twig') }}
+            </div>
 
-    {{ include('place/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_place_index') }}">back to list</a>
-
-    {{ include('place/_delete_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

@@ -8,6 +8,7 @@
     <section>
         <div class="container py-5">
             <div class="row">
+                <a href="{{ path('app_travel_new') }}">Create new travel</a>
                 {% for travel in travels %}
                     <div class="col-lg-4">
                         <div class="card mb-4 border-white">
@@ -96,5 +97,5 @@
             </div>
         </div>
     </section>
-    <a href="{{ path('app_travel_new') }}">Create new</a>
+
 {% endblock %}
