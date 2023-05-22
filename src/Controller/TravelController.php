@@ -9,7 +9,6 @@
     use App\Repository\TravelRepository;
     use App\Service\RegisterService;
     use DateTimeZone;
-    use Doctrine\Common\Collections\ArrayCollection;
     use Doctrine\ORM\EntityManagerInterface;
     use Doctrine\ORM\Exception\ORMException;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,46 +25,32 @@
         {
 
             $allTravels = $travelRepository->findAll();
-            $allTravelsForReturn = new ArrayCollection();
 
             foreach ($allTravels as $travel) {
-                if ($travel->getStatus()->getId() != 6) {
-                    $newStatusId = 0;
-                    $now = date_format(new \DateTime('now', new DateTimeZone('Europe/Paris')), 'Y-m-d H:i');
-
-
-                    if ($travel->getLimitDateSubscription()->format('Y-m-d H:i') < $now) { //cloturé
-                        $newStatusId = 3;
-                    }
-
-
-                    $secondsToAdd = $travel->getDuration()->getTimestamp();
-                    $dateEnd = date('Y-m-d H:i:s', strtotime("+$secondsToAdd seconds", strtotime($travel->getDateStart()->format('Y-m-d H:i'))));
-
-
-                    if ($travel->getDateStart()->format('Y-m-d H:i') < $now && $dateEnd > $now) { //en cours
-                        $newStatusId = 4;
-                    }
-
-
-                    if ($dateEnd < $now) { //terminé
-                        $newStatusId = 5;
-                    }
-
-                    if ($newStatusId != 0) {
-                        $newStatus = $statusRepository->find($newStatusId);
-                        $travel->setStatus($newStatus);
-                        $travelRepository->save($travel, true);
-                    }
-
-
+                $newStatusId = 0;
+                $now = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+                if ($travel->getLimitDateSubscription() < $now) {
+                    $newStatusId = 3;
                 }
-                if (date('Y-m-d H:i', strtotime('+1 month', strtotime($dateEnd))) > $now) {
-                    $allTravelsForReturn->add($travel);
+
+                /*$dateEnd = new \DateTime()
+                if ($travel->getDateStart() < $now && $dateEnd < $now) {
+                    $newStatusId = 4;
+                }
+
+
+                if ($dateEnd < $now) {
+                    $newStatusId = 5;
+                }*/
+
+                if ($newStatusId != 0) {
+                    $newStatus = $statusRepository->find($newStatusId);
+                    $travel->setStatus($newStatus);
+                    $travelRepository->save($travel, true);
                 }
             }
             return $this->render('travel/index.html.twig', [
-                'travels' => $allTravelsForReturn,
+                'travels' => $allTravels,
             ]);
         }
 
@@ -188,14 +173,13 @@
 
 
         #[Route("/cancel/{id}", name: 'cancel_travel', methods: ['GET', 'POST'])]
-        public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository, $id, StatusRepository $statusRepository): Response
+        public function cancelTravel(Travel $travel, Request $request, TravelRepository $travelRepository): Response
         {
             $form = $this->createForm(TravelCancelType::class, $travel);
             $form->handleRequest($request);
 
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $travel->setStatus($statusRepository->find(6));
                 $travelRepository->save($travel, true);
 
                 return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);

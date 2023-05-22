@@ -26,6 +26,3 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-
-###> fichier perso ###
-/public/following_travel_file/
