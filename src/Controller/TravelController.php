@@ -9,6 +9,7 @@
     use App\Repository\TravelRepository;
     use App\Service\RegisterService;
     use DateTimeZone;
+    use Doctrine\Common\Collections\ArrayCollection;
     use Doctrine\ORM\EntityManagerInterface;
     use Doctrine\ORM\Exception\ORMException;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

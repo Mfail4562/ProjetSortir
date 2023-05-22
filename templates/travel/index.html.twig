@@ -8,7 +8,6 @@
     <section>
         <div class="container py-5">
             <div class="row">
-                <a href="{{ path('app_travel_new') }}">Create new travel</a>
                 {% for travel in travels %}
                     <div class="col-lg-4">
                         <div class="card mb-4 border-white">
@@ -47,15 +46,19 @@
                                                 {% set subscribedUser = true %}
                                             {% endif %}
                                         {% endfor %}
+
                                         {% if subscribedUser %}
+
+
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-secondary m-2 my-sm-0 text-muted "
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalName">
                                                 unregister
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1"
+                                            <div class="modal fade" id="modalName" tabindex="-1"
                                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
@@ -97,5 +100,5 @@
             </div>
         </div>
     </section>
-
+    <a href="{{ path('app_travel_new') }}">Create new</a>
 {% endblock %}
