@@ -20,37 +20,51 @@
     class TravelController extends AbstractController
     {
 
-        #[Route('/', name: 'index', methods: ['GET'])]
+       #[Route('/', name: 'index', methods: ['GET'])]
         public function index(TravelRepository $travelRepository, StatusRepository $statusRepository): Response
         {
 
             $allTravels = $travelRepository->findAll();
+            $allTravelsForReturn = new ArrayCollection();
 
             foreach ($allTravels as $travel) {
-                $newStatusId = 0;
-                $now = new \DateTime('now', new DateTimeZone('Europe/Paris'));
-                if ($travel->getLimitDateSubscription() < $now) {
-                    $newStatusId = 3;
+                if ($travel->getStatus()->getId() != 6) {
+                    $newStatusId = 0;
+                    $now = date_format(new \DateTime('now', new DateTimeZone('Europe/Paris')), 'Y-m-d H:i');
+
+
+                    if ($travel->getLimitDateSubscription()->format('Y-m-d H:i') < $now) { //cloturé
+                        $newStatusId = 3;
+                    }
+
+
+                    $secondsToAdd = $travel->getDuration()->getTimestamp();
+                    $dateEnd = date('Y-m-d H:i:s', strtotime("+$secondsToAdd seconds", strtotime($travel->getDateStart()->format('Y-m-d H:i'))));
+
+
+                    if ($travel->getDateStart()->format('Y-m-d H:i') < $now && $dateEnd > $now) { //en cours
+                        $newStatusId = 4;
+                    }
+
+
+                    if ($dateEnd < $now) { //terminé
+                        $newStatusId = 5;
+                    }
+
+                    if ($newStatusId != 0) {
+                        $newStatus = $statusRepository->find($newStatusId);
+                        $travel->setStatus($newStatus);
+                        $travelRepository->save($travel, true);
+                    }
+
+
                 }
-
-                /*$dateEnd = new \DateTime()
-                if ($travel->getDateStart() < $now && $dateEnd < $now) {
-                    $newStatusId = 4;
-                }
-
-
-                if ($dateEnd < $now) {
-                    $newStatusId = 5;
-                }*/
-
-                if ($newStatusId != 0) {
-                    $newStatus = $statusRepository->find($newStatusId);
-                    $travel->setStatus($newStatus);
-                    $travelRepository->save($travel, true);
+                if (date('Y-m-d H:i', strtotime('+1 month', strtotime($dateEnd))) > $now) {
+                    $allTravelsForReturn->add($travel);
                 }
             }
             return $this->render('travel/index.html.twig', [
-                'travels' => $allTravels,
+                'travels' => $allTravelsForReturn,
             ]);
         }
 
