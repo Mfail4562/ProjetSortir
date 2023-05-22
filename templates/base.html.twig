@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html lang=en>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}Sortir !{% endblock %}</title>
-    {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
-    {% endblock %}
-    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="icon" href="{{ asset('img/airplane.avif') }}">
-    {% block extrastyles %}{% endblock %}
-</head>
-<header>
-    {% include 'inc/nav.html.twig' %}
-</header>
-<div style="max-width: 50%" class="container-fluid align-self-auto">
-    {# read and display all flash messages #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="text-center  flash flash-{{ label }}">
-                <p>{{ message }}</p>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}Sortir !{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="icon" href="{{ asset('img/airplane.avif') }}">
+        {% block extrastyles %}{% endblock %}
+    </head>
+    <header>
+        {% include 'inc/nav.html.twig' %}
+    </header>
+    <div style="max-width: 50%" class="container-fluid align-self-auto">
+        {# read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="text-center  flash flash-{{ label }}">
+                    <p>{{ message }}</p>
 
-            </div>
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-</div>
+    </div>
 
 
-<body>
-<main>
-    {% block body %}{% endblock %}
+    <body>
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+    </body>
     {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
-</main>
-</body>
-<footer>
-    <!-- Footer -->
-    <footer class="footer bg-dark text-center text-white ">
-        <!-- Copyright -->
-        <div class="text-center p-3 bg-primary ">
-            &copy; {{ "now"|date("Y") }} Travel.com
-            <a class="text-white" href="{{ path('app_main_index') }}">{ { H&M2 } }</a>
-        </div>
-        <!-- Copyright -->
+    <footer>
+        <!-- Footer -->
+        <footer class="footer bg-dark text-center text-white ">
+            <!-- Copyright -->
+            <div class="text-center p-3 bg-primary ">
+                &copy; {{ "now"|date("Y") }} Travel.com
+                <a class="text-white" href="{{ path('app_main_index') }}">{ { H&M2 } }</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+
+        <!-- Footer -->
+
     </footer>
-
-    <!-- Footer -->
-
-</footer>
 </html>
