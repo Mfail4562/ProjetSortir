@@ -3,9 +3,18 @@
 {% block title %}New Place{% endblock %}
 
 {% block body %}
-    <h1>Create new Place</h1>
 
-    {{ include('place/_form.html.twig') }}
-
-    <a href="{{ path('app_place_index') }}">back to list</a>
+    <h1 class="text-center">Create new Place</h1>
+    <div class="card-body px-4 py-5 px-md-5">
+        <div class="row">
+            <div class="mx-auto col-10 col-md-8 col-lg-6">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
+                <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1" href="{{ path('app_place_index') }}">back to
+                    list</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
