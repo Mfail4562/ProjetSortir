@@ -22,7 +22,6 @@ class FindType extends AbstractType
                 'label'=>'Le nom de la sortie contient :',
                 'attr'=>[
                     'class'=>'form-control',
-
                 ],
                 'required' => false
             ])
@@ -36,14 +35,10 @@ class FindType extends AbstractType
             ->add('leaderTravel', CheckboxType::class, [
                 'label'=>'Sorties dont je suis l\'organisateur',
                 'required' => false,
-
-
             ])
             ->add('statusId', CheckboxType::class, [
                 'label' => 'Sortie passées',
                 'required' => false,
-
-
             ])
 
             ->add('travelsSubscripted', CheckboxType::class, [

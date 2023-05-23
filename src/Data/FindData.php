@@ -20,12 +20,12 @@ class FindData
     public ?string $travelByName = '';
 
     /**
-     * @var User
+     * @var User|null
      */
-    public User $userConnected;
+    public ?User $userConnected;
 
 
-    public function setUserConnected(User $user): void
+    public function setUserConnected(User|null $user): void
     {
         $this->userConnected = $user;
     }
@@ -50,15 +50,15 @@ class FindData
      */
     public ?int $statusId=null;
 
-//    /**
-//     * @var null
-//     */
-//    public $searchDateStart;
-//
-//    /**
-//     * @var null
-//     */
-//    public $searchDateFin;
+    /**
+    * @var null
+     */
+    public $searchDateStart;
+
+    /**
+     * @var null
+     */
+    public $searchDateFin;
 
 
 }

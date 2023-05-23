@@ -172,7 +172,7 @@ class Travel
         return $this;
     }
 
-    public function removeSubscriptionedTraveler(User $subscriptionedTraveler): self
+    public function removeSubscriptionedTraveler(User|null $subscriptionedTraveler): self
     {
         if ($this->subscriptionedTravelers->removeElement($subscriptionedTraveler)) {
             $subscriptionedTraveler->removeSubscriptionedTravel($this);

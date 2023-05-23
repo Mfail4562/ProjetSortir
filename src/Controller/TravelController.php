@@ -23,19 +23,19 @@ class TravelController extends AbstractController
     public function index(TravelRepository $travelRepository, Request $request, EntityManagerInterface $emi): Response
     {
         $data= new FindData();
-
-        $data->setUserConnected($request->getUser());
         $form =$this->createForm(FindType::class, $data);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $userConnected = $this->getUser();
+            $data->setUserConnected($userConnected);
             $travel = $travelRepository->findSearchTravel($data);
         }else{
             $travel = $travelRepository->findAll();
         }
 
-        //dd($travel);
+
         return $this->render('travel/index.html.twig', [
             'travels' => $travel,
             'form'=>$form->createView(),
@@ -188,16 +188,5 @@ class TravelController extends AbstractController
             'travel' => $travel,
             'form' => $form->createView(),
         ]);
-    }
-
-    #[Route('/find', name: 'find', methods: ['POST'])]
-    public function find($id): Response
-    {
-
-        $travelRepo = $this->getDocrine()->getRepository(Travel::class);
-        $travel = $travelRepo->find($id);
-
-        return $this->render('travel/find.html.twig', ["travel" => $travel]);
-
     }
 }

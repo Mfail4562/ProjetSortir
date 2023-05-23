@@ -12,6 +12,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use http\QueryString;
 use Symfony\Component\Validator\Constraints\DateTime;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Travel>
@@ -52,42 +53,49 @@ class TravelRepository extends ServiceEntityRepository
      */
     public function findSearchTravel(FindData $findData): Paginator
     {
-        $query= $this->createQueryBuilder('s')
-
-            ->leftJoin('s.campusOrganiser', 'c')
-            ->leftJoin('s.leader', 'o')
+        $query = $this->createQueryBuilder('s')
+            ->join('s.campusOrganiser', 'c')
+            ->join('s.leader', 'o')
+            ->join('s.subscriptionedTravelers', 'st')
             ->addSelect('c')
             ->addSelect('o');
-            //->andWhere('s.actif=true')
-        if (!empty($findData->campusToSearchTravel))
-        {
-            $query=$query
-                ->andWhere('c.id = '.$findData->campusToSearchTravel->getId());
+
+        if (!empty($findData->campusToSearchTravel)) {
+            $query = $query
+                ->andWhere('c.id = ' . $findData->campusToSearchTravel->getId());
 
         }
 
-        if(!empty($findData->travelByName))
-        {
+        if (!empty($findData->travelByName)) {
             $query = $query
                 ->andWhere('s.name LIKE :n')
                 ->setParameter('n', "%{$findData->travelByName}%");
 
         }
-        if(!empty($findData->statusId))
-        {
+        if (!empty($findData->statusId)) {
             $query = $query
                 ->andWhere('s.status = 5');
         }
 
-        if($findData->leaderTravel) {
+        if ($findData->leaderTravel) {
             $query = $query
-                ->andWhere('s.leader = '. $findData->userConnected->getId());
+                ->andWhere('s.leader = ' . $findData->userConnected->getId());
+        }
+
+        if ($findData->travelsSubscripted) {
+            $query->andWhere('st.id = ' . $findData->userConnected->getId());
+
+        }
+        if ($findData->travelsNotSubscripted) {
+           $query->andWhere($query->expr()->notIn('st.id', $findData->userConnected->getId()));
+
+         dd($query->getQuery()->getSQL());
         }
 
 
-          $query ->addOrderBy('s.dateStart', 'DESC');
-          $requete = $query->getQuery();
-            $requete->setMaxResults(20);
+        //$query->addOrderBy('s.dateStart', 'DESC');
+        $requete = $query->getQuery();
+        $requete->setMaxResults(20);
 
         return new Paginator($requete);
     }
