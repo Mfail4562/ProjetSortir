@@ -87,9 +87,10 @@ class TravelRepository extends ServiceEntityRepository
 
         }
         if ($findData->travelsNotSubscripted) {
-           $query->andWhere($query->expr()->notIn('st.id', $findData->userConnected->getId()));
+           $query->andWhere(':user NOT MEMBER OF s.subscriptionedTravelers')
+               ->setParameter('user', $findData->userConnected);
 
-         dd($query->getQuery()->getSQL());
+         //dd($query->getQuery()->getSQL());
         }
 
 
