@@ -2,9 +2,15 @@
 
 namespace App\Repository;
 
+use App\Data\FindData;
 use App\Entity\Travel;
+use App\Service\Search;
+use Couchbase\SearchMetaData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use http\QueryString;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
@@ -40,106 +46,50 @@ class TravelRepository extends ServiceEntityRepository
         }
     }
 
-
-    public function findByNonClos(): array
+    /**
+     * Récuperer les Travels en lien avec une recherche
+     * @return Paginator
+     */
+    public function findSearchTravel(FindData $findData): Paginator
     {
-        $today = date("Y-m-d H:i:s ");
-        $timestamp = strtotime($today);
-        $nextMonth = strtotime("last month", $timestamp);
-        $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
-        return $this->createQueryBuilder('s')
-            ->andWhere("s.date_start >= :monthPlusOne")
-            ->setParameter('monthPlusOne', $nextMonthDate)
-            ->orderBy('s.id', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
+        $query= $this->createQueryBuilder('s')
 
-    public function findByNonClosCampus($id): array
-    {
-        $today = date("Y-m-d H:i:s ");
-        $timestamp = strtotime($today);
-        $nextMonth = strtotime("last month", $timestamp);
-        $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
-        return $this->createQueryBuilder('s')
-            ->innerJoin('s.leader', 'o')
-            ->andWhere("s.dateStart >= :monthPlusOne")
-            ->setParameter('monthPlusOne', $nextMonthDate)
-            ->andWhere('o.campus = :campus')
-            ->setParameter('campus', $id)
-            ->orderBy('s.id', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findByResearch($param, $user): array
-    {
-        //initiation des date
-        $date = new DateTime();
-        $today = date("Y-m-d H:i:s ");
-        $timestamp = strtotime($today);
-        $nextMonth = strtotime("lastMonth", $timestamp);
-        $nextMonthDate = date("Y-m-d H:i:s", $nextMonth);
-        $query = $this->createQueryBuilder('s');
-
-        //recherche par nom
-        if ($param->get("litteration") != "") {
-            $query->innerJoin('s.leader', 's');
-            $query->andWhere('o.campus = :camp');
-            $query->setParameter('campus', $param->get("litteration"));
-        }
-
-        // recherche par nom
-        if ($param->get("nameTravelRecherch") != "") {
-            $query->andWhere("s.name LIKE :name_travel");
-            $query->setParameter('name_travel', "%" . $param->get("nameTravelRecherch") . "%");
-        }
-
-        //recherche par date debut
-        if ($param->get("dateStart") != "") {
-            $query->andWhere("s.dateStart >= :dateFirs ");
-            $query->setParameter('dateStart', $param->get("dateStart"));
+            ->leftJoin('s.campusOrganiser', 'c')
+            ->leftJoin('s.leader', 'o')
+            ->addSelect('c')
+            ->addSelect('o');
+            //->andWhere('s.actif=true')
+        if (!empty($findData->campusToSearchTravel))
+        {
+            $query=$query
+                ->andWhere('c.id = '.$findData->campusToSearchTravel->getId());
 
         }
-        //recherche par date fin
-        if ($param->get("dateEnd") != "") {
-            $query->andWhere("s.dateStart <= :dateEnd");
-            $query->setParameter('dateEnd', $param->get("dateEnd"));
-        }
-        //recherche par leader
-        if ($param->get("leaderTravel") != null) {
-            $query->andWhere("s.leader = :lead");
-            $query->setParameter('lead', $user->getId());
-        }
 
-        //recherche par inscription
-        if ($param->get("travelSubscri") != null || $param->get("travelDontSubscri") != null) {
+        if(!empty($findData->travelByName))
+        {
+            $query = $query
+                ->andWhere('s.name LIKE :n')
+                ->setParameter('n', "%{$findData->travelByName}%");
 
-            if ($param->get("travelSubscri") != null && $param->get("travelDontSubscri") == null) {
-                $query->innerJoin('s.subscri', 'sub');
-                $query->andWhere('i.participate = :participate');
-                $query->setParameter('participate', $user->getId());
-            } else {
-                if ($param->get("travelSubscri") == null && $param->get("travelDontSubscri") != null) {
-                    $query->leftJoin('s.subscri', 'sub');
-                    $query->andWhere('s.participate != :participate or i.participate is null');
-                    $query->setParameter('participate', $user->getId());
-                }
-            }
+        }
+        if(!empty($findData->statusId))
+        {
+            $query = $query
+                ->andWhere('s.status = 5');
         }
 
-        //recherche des travel passée
-        if ($param->get("travelEnd") != null) {
-            $query->andWhere("s.dateFirs < :ended ");
-            $query->setParameter('ended', $date);
+        if($findData->leaderTravel) {
+            $query = $query
+                ->andWhere('s.leader = '. $findData->userConnected->getId());
         }
 
-        $query->andWhere("s.dateFirs >= :monthPlusOne");
-        $query->setParameter('monthPlusOne', $nextMonthDate);
-        $query->orderBy('s.dateFirs', 'ASC');
-        $requete = $query->getQuery();
 
-        return $requete->getResult();
+          $query ->addOrderBy('s.dateStart', 'DESC');
+          $requete = $query->getQuery();
+            $requete->setMaxResults(20);
+
+        return new Paginator($requete);
     }
 
 

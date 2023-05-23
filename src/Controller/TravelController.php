@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Data\FindData;
 use App\Entity\Travel;
+use App\Form\FindType;
 use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\TravelRepository;
+use App\Service\Search;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,13 +19,26 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/travel', name: 'app_travel_')]
 class TravelController extends AbstractController
 {
-    #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(TravelRepository $travelRepository): Response
+    #[Route('/', name: 'index', methods: ['GET', 'POST'])]
+    public function index(TravelRepository $travelRepository, Request $request, EntityManagerInterface $emi): Response
     {
+        $data= new FindData();
 
+        $data->setUserConnected($request->getUser());
+        $form =$this->createForm(FindType::class, $data);
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $travel = $travelRepository->findSearchTravel($data);
+        }else{
+            $travel = $travelRepository->findAll();
+        }
+
+        //dd($travel);
         return $this->render('travel/index.html.twig', [
-            'travels' => $travelRepository->findAll(),
+            'travels' => $travel,
+            'form'=>$form->createView(),
         ]);
     }
 
@@ -51,12 +67,13 @@ class TravelController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Travel $travel): Response
     {
         return $this->render('travel/show.html.twig', [
-        'travel' => $travel,
-     ]);
+            'travel' => $travel,
+        ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
@@ -90,7 +107,7 @@ class TravelController extends AbstractController
     /**
      * @throws ORMException
      */
-    #[Route('/register/{id}',name: 'register' )]
+    #[Route('/register/{id}', name: 'register')]
     public function register(User $user, $id, Request $request, TravelRepository $travelRepository, EntityManagerInterface $entityManager, Status $status)
     {
         $registered = false;
@@ -173,75 +190,14 @@ class TravelController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_travel_recherche', methods: ['GET'])]
-    public function recherche(Request $request, Travel $travel, TravelRepository $travelRepository, $dateStart, EntityManagerInterface $entityManager, $status, $statusRepository): Response
+    #[Route('/find', name: 'find', methods: ['POST'])]
+    public function find($id): Response
     {
-        $user = $this->getUser();
 
-        $today = date("Y-m-d H:i:s");
-        $travelCampus = $travelRepository->findByNonClosCampus($user->getCampus()->getId());
-        $travel = $travelRepository->findByNonClos();
-        $campus = $travelRepository->findAll();
-        $research = "";
-        $contient = null;
-        $dateStart = null;
-        $duration = null;
-        $lead = false;
-        $subscri = false;
-        $dontSubscri = false;
-        $endTravel = false;
-        $dateValid = true;
+        $travelRepo = $this->getDocrine()->getRepository(Travel::class);
+        $travel = $travelRepo->find($id);
 
+        return $this->render('travel/find.html.twig', ["travel" => $travel]);
 
-        if ($request->query->get("campusResearch")) {
-            //recherche par nom
-            if ($request->query->get("dateEnd") != "" && $request->query->get("dateFirs") != "" && $request->query->get("dateEnd") < $request->query->get("dateFirs")) {
-                $dateValid = false;
-            } else {
-                $travel = $travelRepository->findByResearch($request->query, $this->getUser());
-            }
-            if ($request->query->get("litteration") != "") {
-                $research = $request->query->get("litteration");
-            }
-            if ($request->query->get("nameTravelRecherch") != "") {
-                $contient = $request->query->get("nameTravelRecherch");
-            }
-            if ($request->query->get("dateFirs") != "") {
-                $dateStart = $request->query->get("dateStart");
-            }
-            if ($request->query->get("dateEnd") != "") {
-                $duration = $request->query->get("dateEnd");
-            }
-            if ($request->query->get("leaderTravel") != null) {
-                $lead = true;
-            }
-            if ($request->query->get("travelSubscri") != null) {
-                $subscri = true;
-            }
-
-            if ($request->query->get("travelDontSubscri") != null) {
-                $dontSubscri = true;
-            }
-            if ($request->query->get("travelEnd") != null) {
-                $endTravel = true;
-            }
-        }
-        return $this->render('travel/index.html.twig', [
-            'travel' => $travel,
-            'travelCampus' => $travelCampus,
-            'campus' => $campus,
-            'research' => $research,
-            'contient' => $contient,
-            'dateStart' => $dateStart,
-            'duration' => $duration,
-            'lead' => $lead,
-            'subscri' => $subscri,
-            'dontSubscri' => $dontSubscri,
-            'travelEnd' => $endTravel,
-            'today' => $today,
-            'dateValid' => $dateValid,
-        ]);
     }
-
-
 }
