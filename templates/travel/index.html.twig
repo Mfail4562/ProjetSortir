@@ -53,17 +53,18 @@
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-secondary m-2 my-sm-0 text-muted "
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#modalName">
+                                                    data-bs-target="{{ '#modal'~travel.id }}">
                                                 unregister
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modalName" tabindex="-1"
-                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="{{ 'modal'~travel.id }}" tabindex="-1"
+                                                 aria-labelledby="{{ travel.id~'ModalLabel' }}" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                            <h1 class="modal-title fs-5"
+                                                                id="{{ travel.id~'ModalLabel' }}">
                                                                 Unsubscribe from travel</h1>
                                                             <button type="button" class="btn-close"
                                                                     data-bs-dismiss="modal" aria-label="Close"></button>
