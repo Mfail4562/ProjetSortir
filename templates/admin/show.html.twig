@@ -3,18 +3,25 @@
 {% block title %}AmdinProfileUser{% endblock %}
 
 {% block body %}
-    <section class="border-white">
+    <section>
         <br>
         <h1 class="text-center ">Admin Profile of {{ user.pseudo }}</h1>
-        <div class="container py-5 border-white">
+        <div class="container py-5">
             <div class="row ">
                 <div class="col-lg-4 ">
-                    <div class="card mb-4 border-white">
+                    <div class="card mb-4 border-dark" style="height: 345px">
                         <div class="card-body text-center ">
-                            <img
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2.webp"
-                                    alt="avatar" class="rounded-circle img-fluid"
-                                    style="width: 150px"/>
+                            {% if user.avatarFilename %}
+                                <img
+                                        src="{{ asset('img/userAvatar/'~ user.avatarFilename ) }}"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px; min-height: 150px"/>
+                            {% else %}
+                                <img
+                                        src="{{ asset('img/userAvatar/defaultAvatar.jpg') }}"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px; height: 150px;">
+                            {% endif %}
                             <h5 class="my-3">{{ user.pseudo }}</h5>
                             <p class="text-muted mb-1">{{ user.lastname }} {{ user.firstname }}</p>
                             {% if is_granted("ROLE_ADMIN") %}
@@ -34,7 +41,7 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <div class="card mb-4 border-white">
+                    <div class="card mb-4 border-dark">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-3">
