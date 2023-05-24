@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Place;
 use App\Entity\Travel;
 use App\Form\TravelCancelType;
 use App\Form\TravelType;
@@ -13,7 +14,9 @@ use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,6 +96,30 @@ class TravelController extends AbstractController
             'travel' => $travel,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route("/placeByCity", name: 'listplacesbycity', methods: ["GET", "POST"])]
+    public function listPlacesByCityAction(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+
+        $em = $doctrine->getManager();
+        $placeRepository = $em->getRepository(Place::class);
+
+        $places = $placeRepository->createQueryBuilder('p')
+            ->where('p.city=:city')
+            ->setParameter("city", $request->query->get("city"))
+            ->getQuery()
+            ->getResult();
+
+        $responseArray = array();
+        foreach ($places as $place) {
+            $responseArray[] = array(
+                "id" => $place->getId(),
+                "name" => $place->getName()
+            );
+
+        }
+        return new JsonResponse($responseArray);
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -207,5 +234,6 @@ class TravelController extends AbstractController
         ]);
 
     }
-    // public function
+
+
 }

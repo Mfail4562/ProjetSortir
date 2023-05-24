@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
@@ -83,42 +84,12 @@ class TravelType extends AbstractType
 
             ]);
 
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
-                $form = $event->getForm();
-                $data = $event->getData();
-                $cityId = $data['city'];
-                $city = $this->entityManager->getRepository(City::class)->find($cityId);
-                if (!empty($city)) {
 
-                    $places = $this->entityManager->getRepository(Place::class)->findByCity($city);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
 
-                    $form->add('place', EntityType::class, [
-                        'class' => Place::class,
-                        'choices' => $places,
-                        'choice_label' => 'name',
-                        'placeholder' => 'choose a place',
-                        'required' => false,
-
-                    ]);
-                }
-            });
-
-//        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
-//        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
-//            ->add('campusOrganiser', EntityType::class, [
-//                'class' => Campus::class,
-//                'choice_label' => 'name'
-//            ])
-//            ->add('place', EntityType::class, [
-//                'class' => Place::class,
-//                'choice_label' => 'name'
-//
-//            ]);
     }
 
-//
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -126,54 +97,53 @@ class TravelType extends AbstractType
             'data_class' => Travel::class,
         ]);
     }
+
 //
-//    function onPreSubmit(FormEvent $event)
-//    {
-//        $form = $event->getForm();
-//        $data = $event->getData();
-//        $city = $this->entityManager->getRepository(City::class)->find($data['city']);
-//        $this->addElements($form, $city);
-//
-//    }
-//
-//    protected function addElements(FormInterface $form, City $city = null)
-//    {
-//        $form->add('city', EntityType::class, array(
-//            'required' => true,
-//            'data' => $city,
-//            'placeholder' => 'Select a City...',
-//            'class' => City::class));
-//
-//        $places = array();
-//
-//        if ($city) {
-//            $repoPlace = $this->entityManager->getRepository(Place::class);
-//            $places = $repoPlace->createQueryBuilder('p')
-//                ->where("p.city= city")
-//                ->setParameter('city', $city)
-//                ->getQuery()
-//                ->getResult();
-//        }
-//        $form->add('place', EntityType::class, array(
-//            'required' => true,
-//            'placeholder' => 'Select a City first ...',
-//            'class' => Place::class,
-//            'choices' => $places
-//        ));
-//    }
-//
-//    function onPreSetData(FormEvent $event)
-//    {
-//        $form = $event->getForm();
-//        $travel = $event->getData();
-//
-//        $city = $travel->getPlace() ? $travel->getPlace() : null;
-//        $this->addElements($form, $city);
-//    }
-//
-//    public function getBlockPrefix()
-//    {
-//        return 'AppEntity_Place';
-//    }
+    function onPreSubmit(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $data = $event->getData();
+        $city = $this->entityManager->getRepository(City::class)->find($data['city']);
+        $this->addElements($form, $city);
+
+    }
+
+    protected function addElements(FormInterface $form, City $city = null)
+    {
+        $form->add('city', EntityType::class, array(
+            'required' => true,
+            'data' => $city,
+            'placeholder' => 'Select a City...',
+            'class' => City::class,
+            'choice_label' => 'name',
+            'mapped' => false));
+
+        $places = array();
+
+        if ($city) {
+            $repoPlace = $this->entityManager->getRepository(Place::class);
+            $places = $repoPlace->createQueryBuilder('p')
+                ->where("p.city= city")
+                ->setParameter('city', $city)
+                ->getQuery()
+                ->getResult();
+
+        }
+
+    }
+
+    function onPreSetData(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $travel = $event->getData();
+
+        $city = $travel->getPlace() ? $travel->getPlace() : null;
+        $this->addElements($form, $city);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'AppEntity_Place';
+    }
 
 }
