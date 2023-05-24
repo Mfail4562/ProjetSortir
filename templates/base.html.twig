@@ -22,19 +22,22 @@
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="text-center  flash flash-{{ label }}">
-                {{ message }}
+                <p>{{ message }}</p>
+
             </div>
         {% endfor %}
     {% endfor %}
 </div>
 
 
-<body class="">
+<body>
 <main>
     {% block body %}{% endblock %}
-    {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
 </main>
 </body>
+{% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+{% block extraJavascripts %}
+{% endblock %}
 <footer>
     <!-- Footer -->
     <footer class="footer bg-dark text-center text-white ">

@@ -22,32 +22,42 @@
                     </a>
                 </li>
                 {% if app.user %}
-                    {% if is_granted("ROLE_ADMIN") %}
-                        <li class="nav-item">
-                           <a class="nav-link" href="{{ path('app_place_index') }}" title="place">Place</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_campus_index') }}" title="campus">Campus</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link text-warning"
-                           href="{{ path('app_register') }}" title="Create account" role="button">Register new user</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_travel_index') }}" title="travel">Travel</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_user_show',{id:app.user.id}) }}" title="Profile">Profile
 
-                            ({{ app.user.pseudo }})</a>
+
+                {% if is_granted("ROLE_ORGANISER") %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_city_index') }}" title="City">City</a>
+                    </li>
+                {% endif %}
+                {% if is_granted("ROLE_ADMIN") %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_campus_index') }}" title="campus">Campus</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.pseudo }}
-                            )</a>
+                        <a class="nav-link" href="{{ path('app_place_index') }}" title="place">Place</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-warning"
+                                            href="{{ path('app_register') }}" title="Create account" role="button">Register
+                            new user</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_travel_index') }}" title="travel">Travel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_user_show',{id:app.user.id}) }}" title="Profile">Profile
+
+                        ({{ app.user.pseudo }} | {{ app.user.roles | json_encode(constant('JSON_PRETTY_PRINT')) |raw }}
+                        )</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}" title="Logout">Logout ({{ app.user.pseudo }}
+                        )</a>
+                </li>
 
             </ul>
             {% else %}
@@ -56,7 +66,7 @@
                     <a class="btn btn-secondary m-2 my-sm-0"
                        href="{{ path('app_login') }}" title="Login" role="button">Login</a>
                 </form>
-                
+
             {% endif %}
         </div>
     </div>

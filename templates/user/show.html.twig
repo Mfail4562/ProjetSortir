@@ -3,39 +3,46 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <section class="border-white">
+    <section>
         <br>
-        <h1 class="text-center ">{{ user.pseudo }}</h1>
-        <div class="container py-5 border-white">
+        <h1 class="text-center "> Profile of {{ user.pseudo }}</h1>
+        <div class="container py-5">
             <div class="row ">
                 <div class="col-lg-4 ">
-                    <div class="card mb-4 border-white">
+                    <div class="card mb-4 border-dark" style="height: 345px">
                         <div class="card-body text-center ">
-                            <img
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2.webp"
-                                    alt="avatar" class="rounded-circle img-fluid"
-                                    style="width: 150px"/>
+                            {% if user.avatarFilename %}
+                                <img
+                                        src="{{ asset('img/userAvatar/'~ user.avatarFilename ) }}"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px; min-height: 150px"/>
+                            {% else %}
+                                <img
+                                        src="{{ asset('img/userAvatar/defaultAvatar.jpg') }}"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px; height: 150px;">
+                            {% endif %}
                             <h5 class="my-3">{{ user.pseudo }}</h5>
                             <p class="text-muted mb-1">{{ user.lastname }} {{ user.firstname }}</p>
                             {% if is_granted("ROLE_ADMIN") %}
-                                <div class="d-flex justify-content-center mb-2"><a href="{{ path('app_user_index') }}">back
-                                        to list</a>
+                                <div class="d-flex justify-content-center mb-2"><a
+                                            href="{{ path('app_admin_dashboard') }}">back
+                                        to Admin list</a>
                                 </div>
+                            {% endif %}
+
+                            {% if app.user.id == user.id or is_granted("ROLE_ADMIN") %}
                                 <div class="d-flex justify-content-center mb-2"><a
                                             href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
                                 </div>
                             {% endif %}
-                            {% if app.user.id == user.id %}
-                                <div class="d-flex justify-content-center mb-2"><a
-                                            href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                                </div>
-                            {% endif %}
+
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-8">
-                    <div class="card mb-4 border-white">
+                    <div class="card mb-4 border-dark " style="height: 345px">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -82,6 +89,16 @@
                                 </div>
                             </div>
                             <hr/>
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Roles :</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">{{ user.roles |json_encode(constant('JSON_PRETTY_PRINT')) |raw }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -90,6 +107,4 @@
 
     </section>
 
-
-    {# {{ include('user/_delete_form.html.twig') }} #}
 {% endblock %}

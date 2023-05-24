@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\City;
 use App\Entity\Place;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,6 +40,14 @@ class PlaceRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByCity(City $city)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.city = :city')
+            ->setParameter('city', $city)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Place[] Returns an array of Place objects
 //     */

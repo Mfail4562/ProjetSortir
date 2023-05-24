@@ -11,16 +11,25 @@
                 {% for user in users %}
                     <div class="col-lg-4">
                         <div class="card mb-4 border-white">
-                            <div class="card-body text-center">
-                                <img
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2.webp"
-                                        alt="avatar" class="rounded-circle img-fluid"
-                                        style="width: 150px;">
+                            <div class="card-body text-center" style="height: 500px">
+                                {% if user.avatarFilename %}
+                                    <img
+                                            src="{{ asset('img/userAvatar/'~ user.avatarFilename ) }}"
+                                            alt="avatar" class="rounded-circle img-fluid"
+                                            style="width: 150px; min-height: 150px"/>
+                                {% else %}
+                                    <img
+                                            src="{{ asset('img/userAvatar/defaultAvatar.jpg') }}"
+                                            alt="avatar" class="rounded-circle img-fluid"
+                                            style="width: 150px;height: 150px"/>
+                                {% endif %}
                                 <h5 class="my-3">{{ user.pseudo }}</h5>
                                 <p class="text-muted mb-1">lastname : {{ user.lastname }} </p>
                                 <p class="text-muted mb-1">Firstname: {{ user.firstname }} </p>
                                 <p class="text-muted mb-1">Email : {{ user.email }}</p>
                                 <p class="text-muted mb-4">Campus : {{ user.userCampus.name }}</p>
+                                <p class="text-muted mb-4">Role
+                                    : {{ user.roles |json_encode(constant('JSON_PRETTY_PRINT')) |raw }}</p>
                                 <p class="text-muted mb-1"><a
                                             href="{{ path('app_user_show', {'id': user.id}) }}">show</a></p>
                                 <p class="text-muted mb-1"><a

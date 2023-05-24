@@ -1,0 +1,25 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $('#AppEntity_Place_city').change(function () {
+        let citySelector = $(this);
+        $.ajax({
+            url: '{{ url('app_travel_listplacesbycity') }}',
+            type: 'GET',
+            dataType: 'JSON',
+            data: {
+                city: citySelector.val()
+            },
+            success: function (places) {
+                let placesSelect = $('#AppEntity_Place_place');
+                placesSelect.html('');
+                placesSelect.append('<option value> Select a place of City</option>');
+                $.each(places, function (key, place) {
+                    placesSelect.append('<option value="' + place.id + '">' + place.name + '</option>')
+                });
+            },
+            error: function (err) {
+                alert("ya une erreur du con");
+            }
+        });
+    });
+</script>

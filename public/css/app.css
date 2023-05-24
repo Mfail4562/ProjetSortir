@@ -9,7 +9,6 @@ html {
 }
 
 .footer {
-
     bottom: 0;
     width: 100%;
     height: 60px;
@@ -26,9 +25,13 @@ html {
 }
 
 .flash-success {
-    background-color: green
+    background-color: rgb(60, 242, 129)
 }
 
 .flash-warning {
-    background-color: darkred;
+    background-color: rgb(228, 76, 85);
+}
+
+.flash p {
+    color: white;
 }

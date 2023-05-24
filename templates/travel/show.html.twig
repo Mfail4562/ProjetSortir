@@ -9,7 +9,7 @@
         <div class="container py-5">
             <h1 class="text-center">Show Travel</h1>
             <div class="row">
-                <div class="card border-primary mb-3">
+                <div class="card border-dark mb-3">
                     <img src="{{ asset('img/travelLogo/illustration.jpg') }}" alt="avatar-center"
                          class="rounded-circle img-fluid" style="width:150px">
                     <h5 class="my-3">{{ travel.name }}</h5>
@@ -32,8 +32,11 @@
                     <div class="mb-1">
                         <a class="btn btn-outline-secondary m-2 my-sm-0"
                            href="{{ path('app_travel_index') }}">back to list</a>
-                        <a class="btn btn-outline-secondary m-2 my-sm-0"
-                           href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}"> Cancel</a>
+                        {% if is_granted('ROLE_ORGANISER') %}
+                            <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
+                               href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}"> Cancel</a>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
