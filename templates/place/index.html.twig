@@ -9,7 +9,7 @@
             <div class="row">
                 <a href="{{ path('app_place_new') }}">Create new Place</a>
                 {% for place in places %}
-                    <div class="card mb-4 border-white">
+                    <div class="card mb-4 border-dark">
                         <div class="card-body text-center ">
                             <img
                                     src="{{ asset('img/travelLogo/place.jpg') }}"
@@ -33,5 +33,5 @@
             </div>
         </div>
     </section>
-    <a href="{{ path('app_place_new') }}">Create new</a>
+
 {% endblock %}
