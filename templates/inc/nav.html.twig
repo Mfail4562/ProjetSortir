@@ -23,12 +23,18 @@
                 </li>
                 {% if app.user %}
 
-                {% if is_granted("ROLE_ADMIN") %}
+
+                {% if is_granted("ROLE_ORGANISER") %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_place_index') }}" title="place">Place</a>
                     </li>
+                {% endif %}
+                {% if is_granted("ROLE_ADMIN") %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_campus_index') }}" title="campus">Campus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_city_index') }}" title="City">City</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_admin_dashboard') }}" title="Admin Dashboard">Admin</a>
