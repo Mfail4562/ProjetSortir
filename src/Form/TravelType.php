@@ -131,7 +131,7 @@ class TravelType extends AbstractType
         $form = $event->getForm();
         $travel = $event->getData();
 
-        $city = $travel->getPlace() ? $travel->getPlace() : null;
+        $city = $travel->getPlace() ? $travel->getPlace()->getCity() : null;
         $this->addElements($form, $city);
     }
 
