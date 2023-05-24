@@ -70,12 +70,6 @@ class TravelType extends AbstractType
                 'placeholder' => '--Choice any status--',
 
             ])
-            ->add('city', EntityType::class, [
-                'class' => City::class,
-                'choice_label' => 'name',
-                'mapped' => false,
-                'placeholder' => 'Choose a city',
-            ])
             ->add('place', EntityType::class, [
                 'class' => Place::class,
                 'choice_label' => 'name',
@@ -99,7 +93,7 @@ class TravelType extends AbstractType
     }
 
 //
-    function onPreSubmit(FormEvent $event)
+    function onPreSubmit(FormEvent $event): void
     {
         $form = $event->getForm();
         $data = $event->getData();
@@ -108,7 +102,7 @@ class TravelType extends AbstractType
 
     }
 
-    protected function addElements(FormInterface $form, City $city = null)
+    protected function addElements(FormInterface $form, City $city = null): void
     {
         $form->add('city', EntityType::class, array(
             'required' => true,
@@ -120,19 +114,19 @@ class TravelType extends AbstractType
 
         $places = array();
 
-        if ($city) {
-            $repoPlace = $this->entityManager->getRepository(Place::class);
-            $places = $repoPlace->createQueryBuilder('p')
-                ->where("p.city= city")
-                ->setParameter('city', $city)
-                ->getQuery()
-                ->getResult();
-
-        }
+//        if ($city) {
+//            $repoPlace = $this->entityManager->getRepository(Place::class);
+//            $places = $repoPlace->createQueryBuilder('p')
+//                ->where("p.city= city")
+//                ->setParameter('city', $city)
+//                ->getQuery()
+//                ->getResult();
+//
+//        }
 
     }
 
-    function onPreSetData(FormEvent $event)
+    function onPreSetData(FormEvent $event): void
     {
         $form = $event->getForm();
         $travel = $event->getData();
@@ -141,7 +135,7 @@ class TravelType extends AbstractType
         $this->addElements($form, $city);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'AppEntity_Place';
     }

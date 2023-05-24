@@ -8,6 +8,7 @@ use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\StatusRepository;
 use App\Repository\TravelRepository;
+use App\Repository\UserRepository;
 use App\Service\RegisterService;
 use DateTime;
 use DateTimeZone;
@@ -69,10 +70,11 @@ class TravelController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, TravelRepository $travelRepository, RegisterService $registerService, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, TravelRepository $travelRepository, RegisterService $registerService, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         define('CREATING_MESSAGE', 'creation et inscription automatique :');
-        $user = $this->getUser();
+        $user = $userRepository->find($this->getUser()->getUserIdentifier());
+      
 
         $travel = new Travel();
         $travel->setLeader($user)
@@ -82,6 +84,7 @@ class TravelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $travel->setCampusOrganiser($user->getUserCampus());
 
 
             $travelRepository->save($travel, true);
