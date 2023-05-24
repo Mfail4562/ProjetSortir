@@ -20,13 +20,12 @@
                                 <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p>
                                 <hr/>
                                 <p class="text-muted mb-1">Date debut du
-                                    voyage: {{ travel.dateStart ? travel.dateStart|date('Y-m-d ') : '' }}</p>
+                                    voyage: {{ travel.dateStart|date('Y-m-d ') }}</p>
                                 <hr/>
-                                <p class="text-muted mb-1">Date fin du
-                                    voyage: {{ travel.duration ? travel.duration|date('Y-m-d ') : '' }}</p>
+                                <p class="text-muted mb-1">Durée du voyage: {{ travel.duration|date('H:i') }}</p>
                                 <hr/>
                                 <p class="text-muted mb-1">Date fin des
-                                    inscription: {{ travel.limitDateSubscription ? travel.limitDateSubscription|date('Y-m-d ') : '' }}</p>
+                                    inscription: {{ travel.limitDateSubscription|date('Y-m-d ') }}</p>
                                 <hr/>
                                 <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p>
                                 <hr/>
