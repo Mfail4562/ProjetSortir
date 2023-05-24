@@ -36,7 +36,7 @@
                                     <div class="card-body text-center">
                                         <a class="btn btn-outline-secondary m-2 my-sm-0 "
                                            href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
-                                        {% if is_granted("ROLE_ORGANISER") %}
+                                        {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
                                             <a class="btn btn-secondary m-2 my-sm-0 text-muted "
                                                href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
                                         {% endif %}
