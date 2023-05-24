@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -50,6 +51,18 @@ class FindType extends AbstractType
                 'label' => 'Sortie au quel je ne suis pas inscrit/e',
                 'required' => false,
 
+            ])
+            ->add('searchDateStart',DateType::class, [
+                'label'=>'Entre :',
+                'format'=>'dd-MM-yyyy',
+                'placeholder'=>['year'=>'Année', 'month'=>'Mois', 'day'=>'Jours'],
+                'required' => false
+            ])
+            ->add('searchDateFin',DateType::class, [
+                'label'=>'Et :',
+                'format'=>'dd-MM-yyyy',
+                'placeholder'=>['year'=>'Année', 'month'=>'Mois', 'day'=>'Jours'],
+                'required' => false
             ]);
 
 

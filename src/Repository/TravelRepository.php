@@ -92,8 +92,22 @@ class TravelRepository extends ServiceEntityRepository
 
          //dd($query->getQuery()->getSQL());
         }
+        if(!empty($findData->searchDateStart)&&!empty($findData->searchDateFin))
+        {
+            $query ->andWhere('s.dateStart BETWEEN :searchDateStart AND :searchDateFin')
+                ->setParameter('searchDateStart', $findData->searchDateStart )
+                ->setParameter('searchDateFin',$findData->searchDateFin );
+        }
+        elseif (!empty($findData->searchDateStart)){
+            $query ->andWhere('s.dateStart >= :searchDateStart')
+                ->setParameter('searchDateStart', $findData->searchDateStart);
 
+        }
+        elseif (!empty($findData->searchDateFin)){
+            $query ->andWhere('s.dateStart <= :searchDateFin')
+                ->setParameter('searchDateFin',$findData->searchDateFin);
 
+        }
         //$query->addOrderBy('s.dateStart', 'DESC');
         $requete = $query->getQuery();
         $requete->setMaxResults(20);
