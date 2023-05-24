@@ -84,6 +84,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Travel::class, inversedBy: 'subscriptionedTravelers')]
     private Collection $subscriptionedTravels;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
+
 
     public function __construct()
     {
@@ -294,6 +297,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeSubscriptionedTravel(Travel $subscriptionedTravel): self
     {
         $this->subscriptionedTravels->removeElement($subscriptionedTravel);
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }
