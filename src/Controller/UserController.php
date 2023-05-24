@@ -36,16 +36,19 @@
         #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
         public function edit(Request $request, User $user, UserRepository $userRepository, SluggerInterface $slugger, UserService $userService, $id): Response
         {
+
+            //dd($user);
+
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
 
+
                 $avatarFile = $form->get('avatar')->getData();
                 if ($avatarFile) {
-                    $fileName = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($fileName);
-                    $fileName = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
+
+                    $fileName = 'avatarUser' . $user->getId() . '.webp';
 
                     try {
                         $avatarFile->move(
@@ -55,14 +58,12 @@
                     } catch (FileException $e) {
 
                     }
-
                     $user->setAvatar($fileName);
-
-                    $userRepository->save($user, true);
 
                 }
 
-                //$userRepository->save($user, true);
+                $userRepository->save($user, true);
+
 
                 return $this->redirectToRoute('app_user_show', ['id' => $id], Response::HTTP_SEE_OTHER);
             }

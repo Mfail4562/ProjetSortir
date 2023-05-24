@@ -11,10 +11,17 @@
                 <div class="col-lg-4 ">
                     <div class="card mb-4 border-white">
                         <div class="card-body text-center ">
-                            <img
-                                    src="{{ asset('img/userAvatar/'~ user.avatar ) }}"
-                                    alt="avatar" class="rounded-circle img-fluid"
-                                    style="width: 150px"/>
+                            {% if user.avatarFilename %}
+                                <img
+                                        src="{{ asset('img/userAvatar/'~ user.avatarFilename ) }}"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px"/>
+                            {% else %}
+                                <img
+                                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2.webp"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px"/>
+                            {% endif %}
                             <h5 class="my-3">{{ user.pseudo }}</h5>
                             <p class="text-muted mb-1">{{ user.lastname }} {{ user.firstname }}</p>
                             {% if is_granted("ROLE_ADMIN") %}

@@ -27,7 +27,8 @@
                     ]
                 )
                 ->add('avatar', FileType::class, [
-                    'label' => 'if you want to have some avatar',
+                    'mapped' => false,
+                    'label' => 'if you want to have some avatar :',
                     'required' => false
                 ]);
         }
