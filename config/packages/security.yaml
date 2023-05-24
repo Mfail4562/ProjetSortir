@@ -37,6 +37,7 @@ security:
     - { path: ^/register, roles: ROLE_ADMIN }
     - { path: ^/place/, roles: ROLE_ADMIN }
     - { path: ^/campus/, roles: ROLE_ADMIN }
+    - { path: ^/city/, roles: ROLE_ORGANISER }
     - { path: ^/travel/cancel, roles: ROLE_ORGANISER }
     # - { path: ^/profile, roles: ROLE_USER }
   role_hierarchy:
