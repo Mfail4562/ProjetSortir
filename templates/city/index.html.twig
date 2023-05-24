@@ -9,7 +9,7 @@
         <div class="row">
             <a href="{{ path('app_city_new') }}">Create new City</a>
             {% for city in cities %}
-                <div class="card mb-4 border-white">
+                <div class="card mb-4 border-dark">
                     <div class="card-body text-center ">
                         <img
                                 src="{{ asset('img/travelLogo/city.jpg') }}"
@@ -27,7 +27,6 @@
                         </div>
                     </div>
                 </div>
-
             {% endfor %}
         </div>
     </div>
