@@ -175,7 +175,9 @@
                 $subscriptionedTraveler->removeSubscriptionedTravel($this);
             }
 
+
             return $this;
+
         }
 
         public function getStatus(): ?Status

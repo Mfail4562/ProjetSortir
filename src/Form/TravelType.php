@@ -36,13 +36,24 @@ class TravelType extends AbstractType
 
         $builder
             ->add('name', TextType::class, [
+                'label' => 'Nom de la sortie',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control mb-2'
+                ],
             ])
             ->add('dateStart', DateTimeType::class, [
+                'label' => 'Date de début',
+                'html5' => true,
                 'widget' => 'single_text',
                 'input_format' => 'd-m-Y H:m',
                 'attr' => [
                     'class' => 'form-control datetimepicker',
-
+                ],
+                'constraints' => [
+                new GreaterThan([
+                    'value' => new \DateTime()
+                ])
                 ]
             ])
             ->add('duration', TimeType::class, [

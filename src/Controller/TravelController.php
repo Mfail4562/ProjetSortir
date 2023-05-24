@@ -2,17 +2,26 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Place;
+
+use App\Data\FindData;
+
 use App\Entity\Travel;
+use App\Form\FindType;
 use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\StatusRepository;
 use App\Repository\TravelRepository;
+
 use App\Repository\UserRepository;
 use App\Service\RegisterService;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
+
+use App\Service\Search;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,9 +35,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class TravelController extends AbstractController
 {
 
-    #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(TravelRepository $travelRepository, StatusRepository $statusRepository): Response
+
+    #[Route('/', name: 'index', methods: ['GET', 'POST'])]
+    public function index(TravelRepository $travelRepository, StatusRepository $statusRepository, Request $request, EntityManagerInterface $emi): Response
+
     {
+        $data= new FindData();
+        $form =$this->createForm(FindType::class, $data);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userConnected = $this->getUser();
+            $data->setUserConnected($userConnected);
+            $travel = $travelRepository->findSearchTravel($data);
+        }else{
+            $travel = $travelRepository->findAll();
+        }
 
         $allTravels = $travelRepository->findAll();
         $allTravelsForReturn = new ArrayCollection();
@@ -65,7 +88,11 @@ class TravelController extends AbstractController
             }
         }
         return $this->render('travel/index.html.twig', [
+
             'travels' => $allTravelsForReturn,
+
+            'form'=>$form->createView(),
+
         ]);
     }
 
@@ -130,7 +157,6 @@ class TravelController extends AbstractController
     {
         return $this->render('travel/show.html.twig', [
             'travel' => $travel,
-
         ]);
     }
 
@@ -165,15 +191,18 @@ class TravelController extends AbstractController
     /**
      * @throws ORMException
      */
-
     #[Route('/register/{id}', name: 'register')]
+
     public function register(
         EntityManagerInterface $entityManager,
                                $id,
         TravelRepository       $travelRepository,
         RegisterService        $registerService,
-        Request                $request
+        Request                $request,
+  User $user, 
+   Status $status
     ): Response
+
     {
         define('REGISTERING_MESSAGE', 'inscription :');
         $currentUser = $this->getUser();
@@ -237,6 +266,5 @@ class TravelController extends AbstractController
         ]);
 
     }
-
-
 }
+

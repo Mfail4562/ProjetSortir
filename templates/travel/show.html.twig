@@ -3,6 +3,8 @@
 {% block title %}Travel{% endblock %}
 
 {% block body %}
+
+    <h1>Travel</h1>
     <section>
         <div class="container py-5">
             <h1 class="text-center">Show Travel</h1>
@@ -28,12 +30,13 @@
                     <hr/>
 
                     <div class="mb-1">
-                        <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
+                        <a class="btn btn-outline-secondary m-2 my-sm-0"
                            href="{{ path('app_travel_index') }}">back to list</a>
                         {% if is_granted('ROLE_ORGANISER') %}
                             <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
                                href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}"> Cancel</a>
                         {% endif %}
+
                     </div>
                 </div>
             </div>

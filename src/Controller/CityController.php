@@ -34,7 +34,7 @@ class CityController extends AbstractController
             return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('city/new.html.twig', [
+        return $this->render('city/new.html.twig', [
             'city' => $city,
             'form' => $form,
         ]);
