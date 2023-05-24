@@ -3,51 +3,17 @@
 {% block title %}New Travel{% endblock %}
 
 {% block body %}
-
-    <h1>Create new Travel</h1>
-
-
-          <button class=""><a href="{{ path('app_travel_index') }}">back to list</a></button>
-
+    <h1 class="text-center">Create new Travel</h1>
+    <div class="card-body px-4 py-5 px-md-5">
         <div class="row">
-
-             <div class="col-md-6 ">
-                    {{ form_start(form) }}
-             <div class="form-group border-white">
-                    {{ form_row(form.name) }}
-                    {{ form_row(form.dateStart)  }}
-                    {{ form_row(form.limitDateSubscription) }}
-                    {{ form_row(form.nbMaxTraveler) }}
-                    {{ form_row(form.duration) }}
-                    {{ form_row(form.infos) }}
-
-             </div>
-             </div>
-
-            <div class="col-md-6 ">
+            <div class="mx-auto col-10 col-md-8 col-lg-6">
                 {{ form_start(form) }}
-
-                <div class="form-group">
-                   {#  {{ form_row(form.campusOrganiser) }}#}
-                   {{ form_row(form.place) }}
-
-
-                </div>
                 {{ form_widget(form) }}
-                <div class="container col-3  mx-auto">
-                    <button class="btn">{{ button_label|default('Save')}}</button>
-                    <a href="{{ path('app_travel_new')}}">CREATE</a>
-                    <button type="button" class="btn btn-primary btn-lg "><a href="{{ path('app_travel_index') }}">CANCEL</a></button>
-                </div>
+                <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
+                <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1" href="{{ path('app_travel_index') }}">back to
+                    Travel list</a>
                 {{ form_end(form) }}
-
             </div>
         </div>
-
-
-
-
-
-
-
+    </div>
 {% endblock %}
