@@ -6,12 +6,13 @@
 
 
     <h1 class="text-center">Travels List</h1>
-    <a href="{{ path('app_travel_new') }}">Create new</a>
 
     <section>
         <div class="container py-10">
             <div class="row">
             <div class="col-md-3">
+                <div class="align-content-center"><a   class="btn btn-light m-0 "href="{{ path('app_travel_new') }}">Create new</a></div>
+                <hr>
                 {% include'travel/find.html.twig' with {form:form} only %}
             </div>
             <div class="col-lg-8">
@@ -38,52 +39,15 @@
 
                                 <hr/>
                                 <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p>
-                                <hr/>
-                                <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p>
-                                <hr/>
 
-                                <p class="text-muted mb-1">Liste des participants: </p>
-                                <table class="table table-striped mt-1 mb-2">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-muted mb-1">Pseudo</th>
-                                        <th class="text-muted mb-1">Nom</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    {% if travel.subscriptionedTravelers|length is same as(0) %}
-                                        <tr>
-                                            <td colspan="2">
-                                                <p class="text-muted mb-1">Aucun participant inscrit.</p>
-                                            </td>
-                                        </tr>
-                                    {% else %}
-                                        {% for subscriptionedTravelers in travel.subscriptionedTravelers %}
-                                            <tr>
-                                                <td class="text-muted mb-1">
-                                                    {% if subscriptionedTravelers.pseudo is not null %}
-                                                        {{ subscriptionedTravelers.pseudo }}
-                                                    {% else %}
-                                                        -
-                                                    {% endif %}
-                                                </td>
-                                                <td class="text-muted mb-1">
-                                                    {{ subscriptionedTravelers.lastname }}  {{ subscriptionedTravelers.firstname }}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    {% endif %}
-                                    </tbody>
-                                </table>
                                 <hr/>
                                 <div>
                                     <div class="card-body text-center">
-                                        <a class="btn btn-outline-secondary m-2 my-sm-0 "
+                                        <a class="btn btn-info m-0 "
                                            href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
 
                                         {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
-                                            <a class="btn btn-secondary m-2 my-sm-0 text-muted "
+                                            <a class="btn btn-info m-0 "
                                                href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
                                         {% endif %}
 
@@ -98,7 +62,7 @@
 
 
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-secondary m-2 my-sm-0 text-muted "
+                                            <button type="button" class="btn btn-secondary m-0 my-sm-0 text-muted "
                                                     data-bs-toggle="modal"
                                                     data-bs-target="{{ '#modal'~travel.id }}">
                                                 unregister
@@ -127,14 +91,14 @@
                                                                     data-bs-dismiss="modal">Keep registered
                                                             </button>
                                                             <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}"
-                                                               class="btn btn-outline-danger">Unregister</a>
+                                                               class="btn btn-danger m-0">Unregister</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         {% elseif travel.status.id == 2 and travel.subscriptionedTravelers.count < travel.nbMaxTraveler %}
 
-                                            <a class="btn btn-secondary m-2 my-sm-0 text-muted "
+                                            <a class="btn btn-info m-0"
                                                href="{{ path('app_travel_register', {'id': travel.id }) }}">register</a>
                                         {% endif %}
 

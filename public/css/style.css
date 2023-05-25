@@ -10,9 +10,8 @@ html {
 body {
     margin: 0;
     padding: 0;
-
     color: black;
-    font-family: "open sans";
+    background-color:#7d55c7;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -96,3 +95,35 @@ body {
     padding: 0.5rem;
 }
 
+@media (min-width: 375px ) and (max-width: 668px){
+
+    nav {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        color: black;
+        font-family: "open sans";
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+}
+
+@media (min-width: 768px)  {
+    nav {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+
+    .hiddenDesktop {
+        display: none
+    }
+
+
+}
