@@ -10,9 +10,10 @@ html {
 body {
     margin: 0;
     padding: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 5, 5, 0.7)), url('../img/bgimg2.jpg') no-repeat center;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 5, 5, 0.8)), url('../img/travelLogo/bg-img.png') no-repeat;
+    background-size: cover;
     color: black;
-    font-family: "open sans";
+    font-family: "open sans", serif;
     height: 100vh;
     display: flex;
     flex-direction: column;

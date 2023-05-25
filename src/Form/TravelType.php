@@ -55,6 +55,7 @@
                         new GreaterThan([
                             'value' => new \DateTime()
                         ])
+
                     ]
                 ])
                 ->add('duration', TimeType::class, [
@@ -80,13 +81,6 @@
                     'class' => Status::class,
                     'choice_label' => 'wording',
                     'placeholder' => '--Choice any status--',
-
-                ])
-                ->add('place', EntityType::class, [
-                    'class' => Place::class,
-                    'choice_label' => 'name',
-                    'placeholder' => 'Choose a place',
-                    'required' => false,
 
                 ]);
 
@@ -122,24 +116,35 @@
                 'placeholder' => 'Select a City...',
                 'class' => City::class,
                 'choice_label' => 'name',
-                'mapped' => false));
+                'mapped' => false
+            ));
 
             $places = array();
 
-//        if ($city) {
-//            $repoPlace = $this->entityManager->getRepository(Place::class);
-//            $places = $repoPlace->createQueryBuilder('p')
-//                ->where("p.city= city")
-//                ->setParameter('city', $city)
-//                ->getQuery()
-//                ->getResult();
-//
-//        }
+            if ($city) {
+                $repoPlaces = $this->entityManager->getRepository(Place::class);
+
+                $places = $repoPlaces->createQueryBuilder('p')
+                    ->where('p.city = :city')
+                    ->setParameter('city', $city->getId())
+                    ->getQuery()
+                    ->getResult();
+            }
+
+            $form->add('place', EntityType::class, [
+                'required' => true,
+                'placeholder' => 'Choose a city first...',
+                'class' => Place::class,
+                'choices' => $places,
+
+            ]);
+
 
         }
 
         function onPreSetData(FormEvent $event): void
         {
+
             $form = $event->getForm();
             $travel = $event->getData();
 
@@ -151,5 +156,4 @@
         {
             return 'AppEntity_Place';
         }
-
     }

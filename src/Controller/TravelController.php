@@ -98,8 +98,7 @@
 
 
             $travel = new Travel();
-            $travel->setLeader($user)
-                ->setDateStart(new DateTime('now', new DateTimeZone('Europe/Paris')));
+            $travel->setLeader($user);
 
             $form = $this->createForm(TravelType::class, $travel);
             $form->handleRequest($request);
@@ -157,8 +156,10 @@
         #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
         public function edit(Request $request, Travel $travel, TravelRepository $travelRepository): Response
         {
+            $travel->setPlace(null);
             $form = $this->createForm(TravelType::class, $travel);
             $form->handleRequest($request);
+
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $travelRepository->save($travel, true);
