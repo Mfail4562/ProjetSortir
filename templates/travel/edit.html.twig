@@ -9,10 +9,38 @@
             <div class="row">
                 <div class="mx-auto col-10 col-md-8 col-lg-6">
                     {{ form_start(form) }}
-                    {{ form_widget(form) }}
-                    <button class="btn btn-secondary">{{ button_label|default('Update travel') }}</button>
-                    <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
-                       href="{{ path('app_travel_index') }}">back to travel list</a>
+
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name) }}
+
+                    {{ form_label(form.dateStart) }}
+                    {{ form_widget(form.dateStart) }}
+
+                    {{ form_label(form.duration) }}
+                    {{ form_widget(form.duration) }}
+
+                    {{ form_label(form.limitDateSubscription) }}
+                    {{ form_widget(form.limitDateSubscription) }}
+
+                    {{ form_label(form.nbMaxTraveler) }}
+                    {{ form_widget(form.nbMaxTraveler) }}
+
+                    {{ form_label(form.infos) }}
+                    {{ form_widget(form.infos) }}
+
+                    {{ form_label(form.status) }}
+                    {{ form_widget(form.status) }}
+
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city) }}
+
+                    {{ form_label(form.place) }}
+                    {{ form_widget(form.place) }}
+                    <div class="mt-4">
+                        <button class="btn btn-secondary ">{{ button_label|default('Update travel') }}</button>
+                        <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1 "
+                           href="{{ path('app_travel_index') }}">back to travel list</a>
+                    </div>
                     {{ form_end(form) }}
                     {{ include('travel/_delete_form.html.twig') }}
                 </div>
