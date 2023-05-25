@@ -1,17 +1,29 @@
 <?php
 
-namespace App\DataFixtures;
+    namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+    use App\Entity\City;
+    use Doctrine\Bundle\FixturesBundle\Fixture;
+    use Doctrine\Persistence\ObjectManager;
+    use Faker;
 
-class CityFixtures extends Fixture
-{
-    public function load(ObjectManager $manager): void
+    class CityFixtures extends Fixture
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        public function load(ObjectManager $manager): void
+        {
+            $faker = Faker\Factory::create('fr_FR');
 
-        $manager->flush();
+            for ($i = 0; $i < 5; $i++) {
+                $city = new City();
+                $city->setName($faker->city)
+                    ->setZipCode($faker->numberBetween(01001, 95999));
+
+                $this->addReference('city-' . $i, $city);
+
+                $manager->persist($city);
+            }
+
+            $manager->flush();
+
+        }
     }
-}

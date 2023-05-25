@@ -14,12 +14,12 @@
 
             $faker = Faker\Factory::create('fr_FR');
 
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $campus = new Campus();
                 $campus->setName($faker->city);
                 $manager->persist($campus);
-                $manager->flush();
             }
+            $manager->flush();
 
 
         }

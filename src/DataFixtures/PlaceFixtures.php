@@ -1,17 +1,31 @@
 <?php
 
-namespace App\DataFixtures;
+    namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+    use App\Entity\Place;
+    use Doctrine\Bundle\FixturesBundle\Fixture;
+    use Doctrine\Persistence\ObjectManager;
+    use Faker;
 
-class PlaceFixtures extends Fixture
-{
-    public function load(ObjectManager $manager): void
+    class PlaceFixtures extends Fixture
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        public function load(ObjectManager $manager): void
+        {
+            $faker = Faker\Factory::create('fr_FR');
 
-        $manager->flush();
+
+            for ($i = 0; $i < 50; $i++) {
+                $place = new Place();
+                $city = $this->getReference('city-' . rand(0, 4));
+                $place->setName($faker->city)
+                    ->setLatitude($faker->latitude)
+                    ->setLongitude($faker->longitude)
+                    ->setStreet($faker->streetName)
+                    ->setCity($city);
+                $manager->persist($place);
+            }
+
+
+            $manager->flush();
+        }
     }
-}
