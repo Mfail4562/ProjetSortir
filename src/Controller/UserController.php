@@ -1,70 +1,77 @@
 <?php
 
-    namespace App\Controller;
+namespace App\Controller;
 
-    use App\Entity\User;
-    use App\Form\UserType;
-    use App\Repository\UserRepository;
-    use App\Service\UserService;
-    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    use Symfony\Component\HttpFoundation\Request;
-    use Symfony\Component\HttpFoundation\Response;
-    use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
+use App\Form\UserType;
+use App\Repository\UserRepository;
+use App\Service\UserService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-    #[Route('/user')]
-    class UserController extends AbstractController
+
+#[Route('/user')]
+class UserController extends AbstractController
+{
+    #[Route('/', name: 'app_user_index', methods: ['GET'])]
+    public function index(UserRepository $userRepository): Response
     {
-        #[Route('/', name: 'app_user_index', methods: ['GET'])]
-        public function index(UserRepository $userRepository): Response
-        {
-            return $this->render('user/index.html.twig', [
-                'users' => $userRepository->findAll(),
-            ]);
-        }
+        return $this->render('user/index.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
 
-        #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-        public function show(int $id, UserRepository $userRepository): Response
-        {
-            $user = $userRepository->find($id);
-            return $this->render('user/show.html.twig', [
-                'user' => $user,
-            ]);
-        }
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    public function show(int $id, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($id);
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
 
         #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
         public function edit(Request $request, User $user, UserRepository $userRepository, $id, UserService $userService): Response
         {
 
 
-            $form = $this->createForm(UserType::class, $user);
-            $form->handleRequest($request);
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
 
                 $directory = $this->getParameter('avatar_directory');
                 $user = $userService->updateAvatarFile($form, $user, $directory);
 
 
-                $userRepository->save($user, true);
-
-
-                return $this->redirectToRoute('app_user_show', ['id' => $id], Response::HTTP_SEE_OTHER);
             }
 
-            return $this->render('user/edit.html.twig', [
-                'user' => $user,
-                'form' => $form->createView(),
-            ]);
+            $userRepository->save($user, true);
+
+
+            return $this->redirectToRoute('app_user_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
-        #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-        public function delete(Request $request, User $user, UserRepository $userRepository): Response
-        {
-            if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-                $userRepository->remove($user, true);
-            }
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
+
+    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            $userRepository->remove($user, true);
+        }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+   
+}
