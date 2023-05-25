@@ -8,14 +8,14 @@
     <h1 class="text-center">Travels List</h1>
 
     <section>
-        <div class="container py-10">
+        <div class="container py-15">
             <div class="row">
             <div class="col-md-3">
-                <div class="align-content-center"><a   class="btn btn-light m-0 "href="{{ path('app_travel_new') }}">Create new</a></div>
+                <div class="d-grid gap-2"><a class="btn btn-light m-0 "href="{{ path('app_travel_new') }}">Create new</a></div>
                 <hr>
                 {% include'travel/find.html.twig' with {form:form} only %}
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <div class="row">
                 {% for travel in travels %}
                     <div class="col-lg-6 ">
@@ -43,12 +43,13 @@
                                 <hr/>
                                 <div>
                                     <div class="card-body text-center">
-                                        <a class="btn btn-info m-0 "
+                                        <a class="btn btn-info my-sm-2 "
                                            href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
 
                                         {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
-                                            <a class="btn btn-info m-0 "
+                                            <a class="btn btn-info my-sm-2"
                                                href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+
                                         {% endif %}
 
                                         {% set subscribedUser = false %}
@@ -62,7 +63,7 @@
 
 
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-secondary m-0 my-sm-0 text-muted "
+                                            <button type="button" class="btn btn-secondary  "
                                                     data-bs-toggle="modal"
                                                     data-bs-target="{{ '#modal'~travel.id }}">
                                                 unregister
@@ -87,11 +88,11 @@
                                                             <p class="text-warning">this action can be permanently</p>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-success"
+                                                            <button type="button" class="btn btn-success"
                                                                     data-bs-dismiss="modal">Keep registered
                                                             </button>
                                                             <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}"
-                                                               class="btn btn-danger m-0">Unregister</a>
+                                                               class="btn btn-danger ">Unregister</a>
                                                         </div>
                                                     </div>
                                                 </div>
