@@ -54,6 +54,7 @@ class TravelType extends AbstractType
                 new GreaterThan([
                     'value' => new \DateTime()
                 ])
+<<<<<<< Updated upstream
                 ]
             ])
             ->add('duration', TimeType::class, [
@@ -79,6 +80,46 @@ class TravelType extends AbstractType
                 'class' => Status::class,
                 'choice_label' => 'wording',
                 'placeholder' => '--Choice any status--',
+=======
+                ->add('dateStart', DateTimeType::class, [
+                    'label' => 'Date de début',
+                    'html5' => true,
+                    'widget' => 'single_text',
+                    'attr' => [
+                        'class' => 'form-control datetimepicker',
+                    ],
+                    'constraints' => [
+                        new GreaterThan([
+                            'value' => new \DateTime()
+                        ])
+                    ]
+                ])
+                ->add('duration', TimeType::class, [
+                    'label' => 'Duration',
+                    'widget' => 'choice',
+                ])
+                ->add('limitDateSubscription', DateType::class, [
+                    'widget' => 'single_text',
+
+                ])
+                ->add('nbMaxTraveler', ChoiceType::class, [
+                    'label' => 'Maximum number of travelers',
+                    'choices' => array_combine(range(0, 50), range(0, 50)),
+                    'constraints' => [
+                        new Range([
+                            'min' => 0,
+                            'max' => 50,
+                        ])
+                    ]
+                ])
+                ->add('infos', TextareaType::class, [
+                    'label' => 'Description'
+                ])
+                ->add('status', EntityType::class, [
+                    'class' => Status::class,
+                    'choice_label' => 'wording',
+                    'placeholder' => '--Choice any status--',
+>>>>>>> Stashed changes
 
             ])
             ->add('place', EntityType::class, [
@@ -135,6 +176,26 @@ class TravelType extends AbstractType
 //
 //        }
 
+<<<<<<< Updated upstream
+=======
+        }
+
+        function onPreSetData(FormEvent $event): void
+        {
+
+            $form = $event->getForm();
+            $travel = $event->getData();
+
+            $city = $travel->getPlace() ? $travel->getPlace()->getCity() : null;
+            $this->addElements($form, $city);
+        }
+
+        public function getBlockPrefix(): string
+        {
+            return 'AppEntity_Place';
+        }
+
+>>>>>>> Stashed changes
     }
 
     function onPreSetData(FormEvent $event): void

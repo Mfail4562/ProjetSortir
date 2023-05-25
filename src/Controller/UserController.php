@@ -7,11 +7,9 @@
     use App\Repository\UserRepository;
     use App\Service\UserService;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    use Symfony\Component\HttpFoundation\File\Exception\FileException;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\Routing\Annotation\Route;
-    use Symfony\Component\String\Slugger\SluggerInterface;
 
     #[Route('/user')]
     class UserController extends AbstractController
@@ -34,10 +32,9 @@
         }
 
         #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-        public function edit(Request $request, User $user, UserRepository $userRepository, SluggerInterface $slugger, UserService $userService, $id): Response
+        public function edit(Request $request, User $user, UserRepository $userRepository, $id, UserService $userService): Response
         {
 
-            //dd($user);
 
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
@@ -45,22 +42,9 @@
             if ($form->isSubmitted() && $form->isValid()) {
 
 
-                $avatarFile = $form->get('avatar')->getData();
-                if ($avatarFile) {
+                $directory = $this->getParameter('avatar_directory');
+                $user = $userService->updateAvatarFile($form, $user, $directory);
 
-                    $fileName = 'avatarUser' . $user->getId() . '.webp';
-
-                    try {
-                        $avatarFile->move(
-                            $this->getParameter('avatar_directory'),
-                            $fileName
-                        );
-                    } catch (FileException $e) {
-
-                    }
-                    $user->setAvatar($fileName);
-
-                }
 
                 $userRepository->save($user, true);
 
@@ -82,25 +66,5 @@
             }
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-
-        #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-        public function new(Request $request, UserRepository $userRepository): Response
-        {
-            $user = new User();
-            $form = $this->createForm(UserType::class, $user);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $userRepository->save($user, true);
-
-                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-            }
-
-            return $this->render('user/new.html.twig', [
-                'user' => $user,
-                'form' => $form->createView(),
-            ]);
         }
     }

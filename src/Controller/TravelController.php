@@ -73,6 +73,7 @@ class TravelController extends AbstractController
                     $newStatusId = 4;
                 }
 
+<<<<<<< Updated upstream
                 if ($dateEnd < $now) { //terminé
                     $newStatusId = 5;
                 }
@@ -81,6 +82,66 @@ class TravelController extends AbstractController
                     $travel->setStatus($newStatus);
                     $travelRepository->save($travel, true);
                 }
+=======
+                'travels' => $allTravelsForReturn,
+
+                'form' => $form->createView(),
+
+            ]);
+        }
+
+        #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+        public function new(Request $request, TravelRepository $travelRepository, RegisterService $registerService, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+        {
+            define('CREATING_MESSAGE', 'creation et inscription automatique :');
+            $user = $userRepository->find($this->getUser()->getUserIdentifier());
+
+
+            $travel = new Travel();
+            $travel->setLeader($user);
+
+            $form = $this->createForm(TravelType::class, $travel);
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $travel->setCampusOrganiser($user->getUserCampus());
+
+
+                $travelRepository->save($travel, true);
+
+                $registerService->RegisterToTravel($entityManager, $travel->getId(), $travelRepository, $user, $request, CREATING_MESSAGE);
+
+                return $this->redirectToRoute('app_travel_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+
+            return $this->render('travel/new.html.twig', [
+                'travel' => $travel,
+                'form' => $form->createView(),
+            ]);
+        }
+
+        #[Route("/placeByCity", name: 'listplacesbycity', methods: ["GET", "POST"])]
+        public function listPlacesByCityAction(Request $request, ManagerRegistry $doctrine): JsonResponse
+        {
+
+            $em = $doctrine->getManager();
+            $placeRepository = $em->getRepository(Place::class);
+
+            $places = $placeRepository->createQueryBuilder('p')
+                ->where('p.city=:city')
+                ->setParameter("city", $request->query->get("city"))
+                ->getQuery()
+                ->getResult();
+
+            $responseArray = array();
+            foreach ($places as $place) {
+                $responseArray[] = array(
+                    "id" => $place->getId(),
+                    "name" => $place->getName()
+                );
+>>>>>>> Stashed changes
 
             }
             if (date('Y-m-d H:i', strtotime('+1 month', strtotime($dateEnd))) > $now) {
