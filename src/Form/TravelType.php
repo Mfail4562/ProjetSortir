@@ -6,6 +6,7 @@ use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Status;
 use App\Entity\Travel;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -20,6 +21,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\Range;
 
 class TravelType extends AbstractType
@@ -51,9 +53,9 @@ class TravelType extends AbstractType
                     'class' => 'form-control datetimepicker',
                 ],
                 'constraints' => [
-                new GreaterThan([
-                    'value' => new \DateTime()
-                ])
+                    new GreaterThan([
+                        'value' => new DateTime()
+                    ])
                 ]
             ])
             ->add('duration', TimeType::class, [
@@ -125,15 +127,6 @@ class TravelType extends AbstractType
 
         $places = array();
 
-//        if ($city) {
-//            $repoPlace = $this->entityManager->getRepository(Place::class);
-//            $places = $repoPlace->createQueryBuilder('p')
-//                ->where("p.city= city")
-//                ->setParameter('city', $city)
-//                ->getQuery()
-//                ->getResult();
-//
-//        }
 
     }
 

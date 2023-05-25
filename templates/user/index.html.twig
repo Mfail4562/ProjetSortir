@@ -3,9 +3,8 @@
 {% block title %}User index {% endblock %}
 
 {% block body %}
-
-    <h1 class="text-center">List User</h1>
     <section>
+        <h1 class="text-center">List User</h1>
         <div class="container py-5">
             <div class="row">
                 {% for user in users %}
@@ -45,5 +44,4 @@
             </div>
         </div>
     </section>
-    {# <a href="{{ path('app_user_new') }}">Create new</a> #}
 {% endblock %}

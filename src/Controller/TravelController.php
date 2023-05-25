@@ -3,25 +3,19 @@
 namespace App\Controller;
 
 
-use App\Entity\Place;
-
 use App\Data\FindData;
-
+use App\Entity\Place;
 use App\Entity\Travel;
 use App\Form\FindType;
 use App\Form\TravelCancelType;
 use App\Form\TravelType;
 use App\Repository\StatusRepository;
 use App\Repository\TravelRepository;
-
 use App\Repository\UserRepository;
 use App\Service\RegisterService;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use App\Service\Search;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,22 +34,22 @@ class TravelController extends AbstractController
     public function index(TravelRepository $travelRepository, StatusRepository $statusRepository, Request $request, EntityManagerInterface $emi): Response
 
     {
-        $data= new FindData();
-        $form =$this->createForm(FindType::class, $data);
+        $data = new FindData();
+        $form = $this->createForm(FindType::class, $data);
 
         $form->handleRequest($request);
+
+
+        $allTravelsForReturn = new ArrayCollection();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userConnected = $this->getUser();
             $data->setUserConnected($userConnected);
-            $travel = $travelRepository->findSearchTravel($data);
-        }else{
-            $travel = $travelRepository->findAll();
+            $allTravels = $travelRepository->findSearchTravel($data);
+            //dd($allTravels);
+        } else {
+            $allTravels = $travelRepository->findAll();
         }
-
-        $allTravels = $travelRepository->findAll();
-        $allTravelsForReturn = new ArrayCollection();
-
         foreach ($allTravels as $travel) {
             $secondsToAdd = $travel->getDuration()->getTimestamp();
             $dateEnd = date('Y-m-d H:i:s', strtotime("+$secondsToAdd seconds", strtotime($travel->getDateStart()->format('Y-m-d H:i'))));
@@ -91,7 +85,7 @@ class TravelController extends AbstractController
 
             'travels' => $allTravelsForReturn,
 
-            'form'=>$form->createView(),
+            'form' => $form->createView(),
 
         ]);
     }
@@ -101,7 +95,7 @@ class TravelController extends AbstractController
     {
         define('CREATING_MESSAGE', 'creation et inscription automatique :');
         $user = $userRepository->find($this->getUser()->getUserIdentifier());
-      
+
 
         $travel = new Travel();
         $travel->setLeader($user)
@@ -163,8 +157,10 @@ class TravelController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Travel $travel, TravelRepository $travelRepository): Response
     {
+        $travel->setPlace(null);
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $travelRepository->save($travel, true);
@@ -192,15 +188,12 @@ class TravelController extends AbstractController
      * @throws ORMException
      */
     #[Route('/register/{id}', name: 'register')]
-
     public function register(
         EntityManagerInterface $entityManager,
                                $id,
         TravelRepository       $travelRepository,
         RegisterService        $registerService,
         Request                $request,
-  User $user, 
-   Status $status
     ): Response
 
     {

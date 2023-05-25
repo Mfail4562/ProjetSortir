@@ -26,9 +26,12 @@
                             </div>
                         </div>
                     </div>
+                {% else %}
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
                 {% endfor %}
             </div>
         </div>
     </section>
-    <a href="{{ path('app_campus_new') }}">Create new</a>
 {% endblock %}
