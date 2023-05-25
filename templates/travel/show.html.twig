@@ -32,6 +32,10 @@
                     <div class="mb-1">
                         <a class="btn btn-outline-secondary m-2 my-sm-0"
                            href="{{ path('app_travel_index') }}">back to list</a>
+                        {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
+                            <a class="btn btn-secondary m-2 my-sm-0 text-muted "
+                               href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+                        {% endif %}
                         {% if is_granted('ROLE_ORGANISER') %}
                             <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
                                href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}"> Cancel</a>
