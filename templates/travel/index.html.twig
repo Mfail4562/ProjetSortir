@@ -3,127 +3,98 @@
 {% block title %}Travel index{% endblock %}
 
 {% block body %}
+
     <h1 class="text-center">Travels List</h1>
     <a href="{{ path('app_travel_new') }}">Create new</a>
+
     <section>
-        <div class="container py-10">
+        <div class="container py-15">
             <div class="row">
-                <div class="col-md-3">
-                    {% include'travel/find.html.twig' with {form:form} only %}
-                </div>
-                <div class="col-lg-8">
-                    <div class="row">
-                        {% for travel in travels %}
-                            <div class="col-lg-6">
-                                <div class="card mb-6 border-dark">
-                                    <div class="card-body ">
-                                        <img src="{{ asset('img/bgimg1.webp') }}"
-                                             alt="avatar" class=" img-fluid">
-                                        <h5 class="my-3">{{ travel.name }}</h5>
-                                        <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p>
-                                        <hr/>
-                                        <p class="text-muted mb-1">Date debut du
-                                            voyage: {{ travel.dateStart|date('Y-m-d ') }}</p>
-                                        <hr/>
-                                        <p class="text-muted mb-1">Durée du
-                                            voyage: {{ travel.duration|date('H:i') }}</p>
-                                        <hr/>
-                                        <p class="text-muted mb-1">Date fin des
-                                            inscription: {{ travel.limitDateSubscription|date('Y-m-d ') }}</p>
-                                        <hr/>
-                                        <p class="text-muted mb-1">Nombre maximale par
-                                            voyage: {{ travel.nbMaxTraveler }}</p>
-                                        <hr/>
-                                        <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p>
-                                        <hr/>
 
-                                        <p class="text-muted mb-1">Liste des participants: </p>
-                                        <table class="table table-striped mt-1 mb-2">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-muted mb-1">Pseudo</th>
-                                                <th class="text-muted mb-1">Nom</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% if travel.subscriptionedTravelers|length is same as(0) %}
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <p class="text-muted mb-1">Aucun participant inscrit.</p>
-                                                    </td>
-                                                </tr>
-                                            {% else %}
-                                                {% for subscriptionedTravelers in travel.subscriptionedTravelers %}
-                                                    <tr>
-                                                        <td class="text-muted mb-1">
-                                                            {% if subscriptionedTravelers.pseudo is not null %}
-                                                                {{ subscriptionedTravelers.pseudo }}
-                                                            {% else %}
-                                                                -
-                                                            {% endif %}
-                                                        </td>
-                                                        <td class="text-muted mb-1">
-                                                            {{ subscriptionedTravelers.lastname }}  {{ subscriptionedTravelers.firstname }}
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
+            <div class="col-md-3">
+                <div class="d-grid gap-2"><a class="btn btn-light m-0 "href="{{ path('app_travel_new') }}">Create new</a></div>
+                <hr>
+                {% include'travel/find.html.twig' with {form:form} only %}
+            </div>
+            <div class="col-lg-9">
+                <div class="row">
+                {% for travel in travels %}
+                    <div class="col-lg-6 ">
+                        <div class="card mb-6 border-dark m-2">
+                            <div class="card-body ">
+
+                                <img src="{{ asset('img/bgimg1.webp') }}"
+                                     alt="avatar" class=" img-fluid">
+
+                                <h5 class="my-3">{{ travel.name }}</h5>
+                                <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Date debut du
+
+                                    voyage: {{ travel.dateStart|date('Y-m-d ') }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Durée du voyage: {{ travel.duration|date('H:i') }}</p>
+                                <hr/>
+                                <p class="text-muted mb-1">Date fin des
+                                    inscription: {{ travel.limitDateSubscription|date('Y-m-d ') }}</p>
+
+                                <hr/>
+                                <p class="text-muted mb-1">Nombre maximale par voyage: {{ travel.nbMaxTraveler }}</p>
+
+                                <hr/>
+                                <div>
+                                    <div class="card-body text-center">
+                                        <a class="btn btn-info my-sm-2 "
+                                           href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
+
+                                        {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
+                                            <a class="btn btn-info my-sm-2"
+                                               href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
+
+                                        {% endif %}
+
+                                        {% set subscribedUser = false %}
+                                        {% for traveler in travel.subscriptionedTravelers %}
+                                            {% if app.user.id == traveler.id %}
+                                                {% set subscribedUser = true %}
                                             {% endif %}
-                                            </tbody>
-                                        </table>
-                                        <hr/>
-                                        <div>
-                                            <div class="card-body text-center">
-                                                <a class="btn btn-outline-secondary m-2 my-sm-0 "
-                                                   href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
-                                                {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
-                                                    <a class="btn btn-secondary m-2 my-sm-0 text-muted "
-                                                       href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
-                                                {% endif %}
-                                                {% set subscribedUser = false %}
-                                                {% for traveler in travel.subscriptionedTravelers %}
-                                                    {% if app.user.id == traveler.id %}
-                                                        {% set subscribedUser = true %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                                {% if subscribedUser %}
-                                                    <!-- Button trigger modal -->
-                                                    <button type="button"
-                                                            class="btn btn-secondary m-2 my-sm-0 text-muted "
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="{{ '#modal'~travel.id }}">
-                                                        unregister
-                                                    </button>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="{{ 'modal'~travel.id }}" tabindex="-1"
-                                                         aria-labelledby="{{ travel.id~'ModalLabel' }}"
-                                                         aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h1 class="modal-title fs-5"
-                                                                        id="{{ travel.id~'ModalLabel' }}">
+                                        {% endfor %}
 
-                                                                        Unsubscribe from travel</h1>
-                                                                    <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <h5>Are you sure to unregister from this travel
-                                                                        :</h5>
-                                                                    <h5>{{ travel.name }}</h5>
-                                                                    <p class="text-warning">this action can be
-                                                                        permanently</p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button"
-                                                                            class="btn btn-outline-success"
-                                                                            data-bs-dismiss="modal">Keep registered
-                                                                    </button>
-                                                                    <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}"
-                                                                       class="btn btn-outline-danger">Unregister</a>
-                                                                </div>
-                                                            </div>
+                                        {% if subscribedUser %}
+
+
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-secondary  "
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="{{ '#modal'~travel.id }}">
+                                                unregister
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="{{ 'modal'~travel.id }}" tabindex="-1"
+                                                 aria-labelledby="{{ travel.id~'ModalLabel' }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5"
+                                                                id="{{ travel.id~'ModalLabel' }}">
+
+                                                                Unsubscribe from travel</h1>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h5>Are you sure to unregister from this travel :</h5>
+                                                            <h5>{{ travel.name }}</h5>
+                                                            <p class="text-warning">this action can be permanently</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-success"
+                                                                    data-bs-dismiss="modal">Keep registered
+                                                            </button>
+                                                            <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}"
+                                                               class="btn btn-danger ">Unregister</a>
+
                                                         </div>
                                                     </div>
                                                 {% elseif travel.status.id == 2 and travel.subscriptionedTravelers.count < travel.nbMaxTraveler %}
@@ -131,7 +102,14 @@
                                                        href="{{ path('app_travel_register', {'id': travel.id }) }}">register</a>
                                                 {% endif %}
                                             </div>
-                                        </div>
+
+                                        {% elseif travel.status.id == 2 and travel.subscriptionedTravelers.count < travel.nbMaxTraveler %}
+
+                                            <a class="btn btn-info m-0"
+                                               href="{{ path('app_travel_register', {'id': travel.id }) }}">register</a>
+                                        {% endif %}
+
+
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +119,14 @@
                             </tr>
                         {% endfor %}
                     </div>
+
+                {% else %}
+                    <tr>
+                        <td colspan="8">no records found</td>
+                    </tr>
+
+                {% endfor %}
+
                 </div>
             </div>
         </div>

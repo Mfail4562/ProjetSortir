@@ -3,6 +3,7 @@
 {% block title %}Travel{% endblock %}
 
 {% block body %}
+
     <section>
         <div class="container py-5">
             <h1 class="text-center">Show Travel</h1>
@@ -27,15 +28,16 @@
                     <p class="text-muted mb-1">Info voyage: {{ travel.infos }}</p>
                     <hr/>
                     <div class="mb-1">
-                        <a class="btn btn-outline-secondary m-2 my-sm-0"
+                        <a class="btn btn-outline-light m-2 my-sm-0"
                            href="{{ path('app_travel_index') }}">back to list</a>
                         {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
                             <a class="btn btn-secondary m-2 my-sm-0 text-muted "
                                href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
                         {% endif %}
                         {% if is_granted('ROLE_ORGANISER') %}
-                            <a class="btn btn-secondary m-2 my-sm-0 text-muted mb-1"
+                          <div class="btn btn-outline-light m-2 my-sm-0 text-muted mb-1 "> <a class="text-white"
                                href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}"> Cancel</a>
+                          </div>
                         {% endif %}
                     </div>
                 </div>
@@ -48,10 +50,10 @@
             <div class="row">
                 <table class="table  ">
                     <thead>
-                    <tr class="table-secondary">
-                        <th>Pseudo</th>
-                        <th>Name</th>
-                        <th>Profil</th>
+                    <tr class="card border-dark mb-3">
+                        <th>Pseudo :</th>
+                        <th>Name :</th>
+                        <th>Profil :</th>
                     </tr>
                     </thead>
                     <tbody>

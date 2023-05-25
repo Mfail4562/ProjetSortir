@@ -3,9 +3,11 @@
 {% block title %}City index{% endblock %}
 
 {% block body %}
+
     <h1 class="text-center">City List</h1>
     <section>
         <div class="container py-5">
+        <div class="col-lg-9">
             <div class="row">
                 <a href="{{ path('app_city_new') }}">Create new City</a>
                 {% for city in cities %}
@@ -18,6 +20,7 @@
                             <h5 class="my-3">{{ city.name }}</h5>
                             <p class="text-muted mb-1"> City of {{ city.name }}</p>
                             <p class="text-muted mb-1"> ZipCode {{ city.zipCode }}</p>
+
 
                             <div class="d-flex justify-content-center mb-2">
                                 <a href="{{ path('app_city_show', {'id': city.id}) }}">show city</a>
@@ -34,5 +37,7 @@
                 {% endfor %}
             </div>
         </div>
+
     </section>
 {% endblock %}
+
