@@ -31,3 +31,8 @@ yarn-error.log
 /public/following_travel_file/
 /document-projet/
 
+public/img/userAvatar/avatarUser4.webp
+migrations/Version20230524113529.php
+migrations/Version20230524065734.php
+migrations/Version20230522084028.php
+migrations/Version20230517141302.php
