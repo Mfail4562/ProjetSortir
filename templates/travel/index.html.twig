@@ -10,7 +10,8 @@
         <div class="container py-10">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="d-grid gap-2"><a class="btn btn-light m-0 " href="{{ path('app_travel_new') }}">Create
+                    <div class="d-grid gap-2"><a class="btn btn-outline-warning m-0 "
+                                                 href="{{ path('app_travel_new') }}">Create
                             new</a></div>
                     <hr>
                     {% include'travel/find.html.twig' with {form:form} only %}
@@ -23,7 +24,7 @@
                                     <div class="card-body ">
 
                                         <img src="{{ asset('img/bgimg1.webp') }}"
-                                             alt="avatar" class=" img-fluid">
+                                             alt="avatar" class=" img-fluid"/>
 
                                         <h5 class="my-3">{{ travel.name }}</h5>
                                         <p class="text-muted mb-1">Numero de voyage: {{ travel.id }}</p>
@@ -43,7 +44,7 @@
                                         <hr/>
                                         <div>
                                             <div class="card-body text-center">
-                                                <a class="btn btn-info my-sm-2 "
+                                                <a class="btn btn-outline-info my-sm-2 "
                                                    href="{{ path('app_travel_show', {'id': travel.id}) }}">show</a>
 
                                                 {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
@@ -60,40 +61,44 @@
                                                 {% if subscribedUser %}
 
 
-                                                <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-secondary  "
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="{{ '#modal'~travel.id }}">
-                                                    unregister
-                                                </button>
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-outline-secondary  "
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="{{ '#modal'~travel.id }}">
+                                                        unregister
+                                                    </button>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="{{ 'modal'~travel.id }}" tabindex="-1"
-                                                     aria-labelledby="{{ travel.id~'ModalLabel' }}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h1 class="modal-title fs-5"
-                                                                    id="{{ travel.id~'ModalLabel' }}">
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="{{ 'modal'~travel.id }}" tabindex="-1"
+                                                         aria-labelledby="{{ travel.id~'ModalLabel' }}"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5"
+                                                                        id="{{ travel.id~'ModalLabel' }}">
 
-                                                                    Unsubscribe from travel</h1>
-                                                                <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <h5>Are you sure to unregister from this travel :</h5>
-                                                                <h5>{{ travel.name }}</h5>
-                                                                <p class="text-warning">this action can be
-                                                                    permanently</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-success"
-                                                                        data-bs-dismiss="modal">Keep registered
-                                                                </button>
-                                                                <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}"
-                                                                   class="btn btn-danger ">Unregister</a>
+                                                                        Unsubscribe from travel</h1>
+                                                                    <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <h5>Are you sure to unregister from this travel
+                                                                        :</h5>
+                                                                    <h5>{{ travel.name }}</h5>
+                                                                    <p class="text-warning">this action can be
+                                                                        permanently</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button"
+                                                                            class="btn btn-outline-success"
+                                                                            data-bs-dismiss="modal">Keep registered
+                                                                    </button>
+                                                                    <a href="{{ path('app_travel_unregister', {'id': travel.id}) }}"
+                                                                       class="btn btn-outline-danger ">Unregister</a>
 
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
