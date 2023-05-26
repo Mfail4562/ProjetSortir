@@ -31,13 +31,14 @@
                         <a class="btn btn-outline-light m-2 my-sm-0"
                            href="{{ path('app_travel_index') }}">back to list</a>
                         {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
-                            <a class="btn btn-secondary m-2 my-sm-0 text-muted "
+                            <a class="btn btn-outline-secondary m-2 my-sm-0"
                                href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
                         {% endif %}
                         {% if is_granted('ROLE_ORGANISER') %}
-                          <div class="btn btn-outline-light m-2 my-sm-0 text-muted mb-1 "> <a class="text-white"
-                               href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}"> Cancel</a>
-                          </div>
+                            <div class="btn btn-outline-danger m-2 my-sm-0 mb-1 "><a class="text-white"
+                                                                                     href="{{ path('app_travel_cancel_travel', {'id': travel.id}) }}">
+                                    Cancel</a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -50,22 +51,22 @@
             <div class="row">
                 <table class="table  ">
                     <thead>
-                    <tr class="card border-dark mb-3">
-                        <th>Pseudo :</th>
-                        <th>Name :</th>
-                        <th>Profil :</th>
-                    </tr>
+                        <tr class="card border-dark mb-3">
+                            <th>Pseudo :</th>
+                            <th>Name :</th>
+                            <th>Profil :</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {% for t in travel.subscriptionedTravelers %}
-                        <tr>
-                            <td>{{ t.pseudo|upper }}</td>
-                            <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
-                            <td>
-                                <a href="{{ path('app_user_show', {'id': t.id}) }}">show</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                        {% for t in travel.subscriptionedTravelers %}
+                            <tr>
+                                <td>{{ t.pseudo|upper }}</td>
+                                <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
+                                <td>
+                                    <a href="{{ path('app_user_show', {'id': t.id}) }}">show</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
