@@ -28,10 +28,10 @@
                                 <p class="text-muted mb-1">Firstname: {{ user.firstname }} </p>
                                 <p class="text-muted mb-1">Email : {{ user.email }}</p>
                                 <p class="text-muted mb-4">Campus : {{ user.userCampus.name }}</p>
-                                <p class="text-muted mb-1"><a
-                                            href="{{ path('app_admin_user_show', {'id': user.id}) }}">show</a></p>
-                                <p class="text-muted mb-1"><a
-                                            href="{{ path('app_admin_userEdit', {'id': user.id}) }}">edit</a></p>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <a class="btn btn-info m-2 my-sm-2 " href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                                    <a class="btn btn-info m-2 my-sm-2 " href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -29,11 +29,13 @@
                                 <p class="text-muted mb-4">Campus : {{ user.userCampus.name }}</p>
                                 <p class="text-muted mb-4">Role
                                     : {{ user.roles |json_encode(constant('JSON_PRETTY_PRINT')) |raw }}</p>
-                                <p class="text-muted mb-1"><a
-                                            href="{{ path('app_user_show', {'id': user.id}) }}">show</a></p>
-                                <p class="text-muted mb-1"><a
-                                            href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a></p>
-                            </div>
+                                <p class="text-muted mb-1">
+                                <div class="d-flex justify-content-center mb-2">
+                                    <a class="btn btn-info m-2 my-sm-2 " href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                                    <a class="btn btn-info m-2 my-sm-2 " href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                                </div>
+                                </p>
+                                </div>
                         </div>
                     </div>
                 {% else %}

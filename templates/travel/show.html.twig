@@ -7,7 +7,7 @@
     <section>
         <div class="container py-5">
             <h1 class="text-center">Show Travel</h1>
-            <div class="row">
+            <div class="row ">
                 <div class="card border-dark mb-3">
                     <img src="{{ asset('img/travelLogo/illustration.jpg') }}" alt="avatar-center"
                          class="rounded-circle img-fluid" style="width:150px">
@@ -48,24 +48,38 @@
         <div class="container py-5">
             <h1 class="text-center">Participant's List at {{ travel.name }}</h1>
             <div class="row">
-                <table class="table  ">
-                    <thead>
-                    <tr class="card border-dark mb-3">
-                        <th>Pseudo :</th>
-                        <th>Name :</th>
-                        <th>Profil :</th>
+                <table class="table table-striped mt-2 mb-2">
+
+                    <thead class="table-primary">
+                    <tr >
+                        <th class="text-muted mb-1">Pseudo</th>
+                        <th class="text-muted mb-1">Nom</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for t in travel.subscriptionedTravelers %}
+
+                    {% if travel.subscriptionedTravelers|length is same as(0) %}
                         <tr>
-                            <td>{{ t.pseudo|upper }}</td>
-                            <td>{{ t.firstname }} {{ t.lastname|upper }}</td>
-                            <td>
-                                <a href="{{ path('app_user_show', {'id': t.id}) }}">show</a>
+                            <td colspan="2">
+                                <p class="text-info mb-1">Aucun participant inscrit.</p>
                             </td>
                         </tr>
-                    {% endfor %}
+                    {% else %}
+                        {% for subscriptionedTravelers in travel.subscriptionedTravelers %}
+                            <tr>
+                                <td class="text-info mb-1">
+                                    {% if subscriptionedTravelers.pseudo is not null %}
+                                        {{ subscriptionedTravelers.pseudo }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="text-info mb-1">
+                                    {{ subscriptionedTravelers.lastname }}  {{ subscriptionedTravelers.firstname }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

@@ -7,16 +7,15 @@
     <h1 class="text-center">Travels List</h1>
 
     <section>
-        <div class="container py-15">
+        <div class="container py-10">
             <div class="row">
-
                 <div class="col-md-3">
                     <div class="d-grid gap-2"><a class="btn btn-light m-0 " href="{{ path('app_travel_new') }}">Create
                             new</a></div>
                     <hr>
                     {% include'travel/find.html.twig' with {form:form} only %}
                 </div>
-                <div class="col-lg-9">
+                <div class="col-lg-8">
                     <div class="row">
                         {% for travel in travels %}
                             <div class="col-lg-6 ">
@@ -38,11 +37,9 @@
                                         <hr/>
                                         <p class="text-muted mb-1">Date fin des
                                             inscription: {{ travel.limitDateSubscription|date('Y-m-d ') }}</p>
-
                                         <hr/>
                                         <p class="text-muted mb-1">Nombre maximale par
                                             voyage: {{ travel.nbMaxTraveler }}</p>
-
                                         <hr/>
                                         <div>
                                             <div class="card-body text-center">
@@ -52,9 +49,7 @@
                                                 {% if (is_granted("ROLE_ORGANISER") and travel.leader.id == app.user.id) or is_granted("ROLE_ADMIN") %}
                                                     <a class="btn btn-info my-sm-2"
                                                        href="{{ path('app_travel_edit', {'id': travel.id}) }}">edit</a>
-
                                                 {% endif %}
-
                                                 {% set subscribedUser = false %}
                                                 {% for traveler in travel.subscriptionedTravelers %}
                                                     {% if app.user.id == traveler.id %}
@@ -101,14 +96,13 @@
 
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
                                                         {% elseif travel.status.id == 2 and travel.subscriptionedTravelers.count < travel.nbMaxTraveler %}
                                                             <a class="btn btn-secondary m-2 my-sm-0 text-muted "
                                                                href="{{ path('app_travel_register', {'id': travel.id }) }}">register</a>
                                                         {% endif %}
-                                                    </div>
 
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
